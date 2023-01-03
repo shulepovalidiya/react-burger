@@ -1,0 +1,44 @@
+.constructor {
+    max-width: 600px;
+    max-height: 912px;
+}
+
+.constructorList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow: auto;
+    max-height: 464px;
+    padding: 0;
+    margin: 0;
+}
+
+.constructorItem {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+}
+
+.constructorList::-webkit-scrollbar {
+    width: 8px;
+    background-color: transparent;
+}
+
+.constructorList::-webkit-scrollbar-track {
+    max-height: 464px;
+}
+
+.constructorList::-webkit-scrollbar-track-piece {
+    background-color: #2F2F37
+}
+
+.constructorList::-webkit-scrollbar-thumb {
+    background-color: #8585AD;
+
+}
+
+.orderSection {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}

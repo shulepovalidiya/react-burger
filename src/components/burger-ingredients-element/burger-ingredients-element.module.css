@@ -1,0 +1,48 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 8px 32px 24px;
+    max-width: 272px;
+    position: relative;
+}
+
+.card:nth-child(odd) {
+    margin-left: 16px;
+    margin-right: 0px;
+}
+
+.card:nth-last-child(-n + 2) {
+    margin-bottom: 0;
+}
+
+.card:nth-child(-n + 2) {
+    margin-top: 24px;
+}
+
+.counterIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #4C4CFF;
+    color: #F2F2F3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.price {
+    display: flex;
+    gap: 9px;
+    align-items: center;
+    justify-content: center;
+}
+
+.name {
+    text-align: center;
+    margin: 0;
+    min-height: 48px;
+}
