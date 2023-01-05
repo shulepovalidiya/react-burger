@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import BurgerIngredientsStyles from "../burger-ingredients/burger-ingredients.module.css";
 import BurgerIngredientsElement from "../burger-ingredients-element/burger-ingredients-element";
-import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import PropTypes, {arrayOf, oneOf} from "prop-types";
 
 function BurgerIngredientsCategory({ingredientType, data}) {

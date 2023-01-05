@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './App.module.css';
 import AppHeader from "../app-header/app-header";
 import Main from "../main/main";
 import '@ya.praktikum/react-developer-burger-ui-components';
