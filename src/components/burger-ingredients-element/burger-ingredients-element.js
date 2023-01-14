@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 import {Counter} from "@ya.praktikum/react-developer-burger-ui-components";
 import {CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 
-function BurgerIngredientsElement({img, price, name}) {
+function BurgerIngredientsElement({img, price, name, onClick}) {
     return (
-        <figure className={`${ElementStyles.card}`}>
+        <figure className={`${ElementStyles.card}`} onClick={onClick}>
             <Counter count={1} size="default" extraClass="m-1" />
             <img src={img} className="mt-0 mr-4 ml-4 mb-1" alt={name}/>
             <figcaption className="text text_type_main-default">
@@ -23,7 +23,8 @@ function BurgerIngredientsElement({img, price, name}) {
 BurgerIngredientsElement.propTypes = {
     img: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired,
 }
 
 export default BurgerIngredientsElement;
