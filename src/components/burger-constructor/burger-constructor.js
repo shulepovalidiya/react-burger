@@ -10,16 +10,15 @@ import OrderDetails from "../order-details/order-details";
 
 function BurgerConstructor({data}) {
 
-    const [isSubmitBtnClicked, setIsSubmitBtnClicked] = useState(false);
-
+    const [isModalOpened, setIsModalOpened] = useState(false);
 
     function handleSubmitBtnClick() {
-        setIsSubmitBtnClicked(true)
+        setIsModalOpened(true)
     }
 
-    useEffect(() => {
-        setIsSubmitBtnClicked(false)
-    }, [isSubmitBtnClicked])
+    function handleClose() {
+        setIsModalOpened(false)
+    }
 
     function getTotalPrice() {
         let bunsPrice = data[0].price * 2;
@@ -74,9 +73,11 @@ function BurgerConstructor({data}) {
                 <CurrencyIcon type="primary" />
                 <Button htmlType="button" type="primary" size="medium" onClick={handleSubmitBtnClick}>Оформить заказ</Button>
             </div>
-            <Modal shouldOpen={isSubmitBtnClicked} >
-                <OrderDetails />
-            </Modal>
+            {
+                isModalOpened && (<Modal onClose={handleClose}>
+                    <OrderDetails />
+                </Modal>)
+            }
         </section>
     )
 }

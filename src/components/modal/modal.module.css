@@ -14,7 +14,3 @@
     align-items: center;
     justify-content: space-between;
 }
-
-.closed {
-    visibility: hidden;
-}

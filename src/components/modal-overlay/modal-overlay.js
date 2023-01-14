@@ -2,17 +2,16 @@ import React from "react";
 import overlayStyles from './modal-overlay.module.css'
 import PropTypes from "prop-types";
 
-function ModalOverlay({isOpened, children}) {
+function ModalOverlay({children}) {
 
     return (
-        <div className={`${isOpened ? overlayStyles.opened : overlayStyles.closed} modal-overlay`} >
+        <div className={`${overlayStyles.opened} modal-overlay`} >
             {children}
         </div>
     )
 }
 
-ModalOverlay.PropTypes = {
-    isOpened: PropTypes.bool.isRequired,
+ModalOverlay.propTypes = {
     children: PropTypes.element.isRequired,
 }
 

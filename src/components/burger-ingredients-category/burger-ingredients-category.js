@@ -7,18 +7,16 @@ import IngredientDetails from "../ingredient-details/ingredient-details";
 
 function BurgerIngredientsCategory({ingredientType, data}) {
 
-    const [isIngredientClicked, setIsIngredientClicked] = useState(false);
+    const [isModalOpened, setIsModalOpened] = useState(false);
 
     const [selectedIngredient, setSelectedIngredient] = useState({});
 
+    const handleModalClose = () => setIsModalOpened(false);
+
     const handleIngredientClick = (ingredient) => {
-        setIsIngredientClicked(true);
+        setIsModalOpened(true);
         setSelectedIngredient(ingredient);
     }
-
-    useEffect(() => {
-        setIsIngredientClicked(false);
-    }, [isIngredientClicked])
 
     function getCategoryName() {
         let categoryName = "";
@@ -51,9 +49,9 @@ function BurgerIngredientsCategory({ingredientType, data}) {
                     )
                 }
             </ul>
-            <Modal shouldOpen={isIngredientClicked} header="Детали ингредиента">
+            {isModalOpened && (<Modal header="Детали ингредиента" onClose={handleModalClose}>
                 <IngredientDetails ingredient={selectedIngredient}/>
-            </Modal>
+            </Modal>)}
         </>
     )
 }

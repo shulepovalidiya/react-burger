@@ -5,21 +5,17 @@ import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import PropTypes from "prop-types";
 
-function Modal({children, header, shouldOpen }) {
-
-    const [isOpened, setIsOpened] = useState(false);
-
-    const handleClose = () => setIsOpened(false);
+function Modal({children, header, onClose}) {
 
     const closeByEsc = (e) => {
-        if (isOpened && e.key === "Escape") {
-            handleClose();
+        if (e.key === "Escape") {
+            onClose();
         }
     }
 
     const closeByOverlayClick = (e) => {
-        if (isOpened && e.target.classList.contains("modal-overlay")) {
-            handleClose();
+        if (e.target.classList.contains("modal-overlay")) {
+            onClose();
         }
     }
 
@@ -28,22 +24,18 @@ function Modal({children, header, shouldOpen }) {
         document.addEventListener('click', closeByOverlayClick)
         return () => {
             document.removeEventListener('keydown', closeByEsc)
-            document.addEventListener('click', closeByOverlayClick)
+            document.removeEventListener('click', closeByOverlayClick)
         }
-    }, [isOpened])
-
-    useEffect(() => {
-        shouldOpen && setIsOpened(true);
-    }, [shouldOpen])
+    }, [])
 
     const modalRoot = document.getElementById('modals');
 
     return createPortal(
-        <ModalOverlay isOpened={isOpened} >
-            <div className={`${isOpened ? modalStyles.opened : modalStyles.closed}`}>
+        <ModalOverlay onClose={onClose}>
+            <div className={`${modalStyles.opened}`}>
                 <div className={`${modalStyles.header} mt-10 mr-10 ml-10`}>
                     <h2 className="text text_type_main-large">{header}</h2>
-                    <CloseIcon onClick={handleClose} type={"primary"} />
+                    <CloseIcon onClick={onClose} type={"primary"} />
                 </div>
                 {children}
             </div>
@@ -51,10 +43,10 @@ function Modal({children, header, shouldOpen }) {
 
 }
 
-Modal.PropTypes = {
+Modal.propTypes = {
     children: PropTypes.element.isRequired,
     header: PropTypes.string,
-    shouldOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
 }
 
 export default Modal;

@@ -14,15 +14,19 @@ function App() {
     const getIngredientsArray = () => {
         setIsLoading(true);
         fetch(`${BASE_URL}/ingredients`)
-            .then(res => res.json())
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                }
+                return Promise.reject(`Ошибка ${res.status}`);
+            })
             .then(res => {
                 setIngredientsArray(res.data)
-                setIsLoading(false)
             })
             .catch(err => {
                 console.log(err)
-                setIsLoading(false)
             })
+            .finally(() => setIsLoading(false));
     }
 
     useEffect(getIngredientsArray, [])
@@ -31,7 +35,7 @@ function App() {
         <>
             <AppHeader/>
             {!isLoading && <Main data={ingredientsArray}/>}
-            <div id="modals"></div>
+
         </>
     );
 }
