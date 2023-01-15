@@ -1,12 +1,24 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import constructorStyles from "./burger-constructor.module.css";
 import {ConstructorElement} from "@ya.praktikum/react-developer-burger-ui-components";
 import {Button} from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
 import {DragIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import {CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
+import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
 
 function BurgerConstructor({data}) {
+
+    const [isModalOpened, setIsModalOpened] = useState(false);
+
+    function handleSubmitBtnClick() {
+        setIsModalOpened(true)
+    }
+
+    function handleClose() {
+        setIsModalOpened(false)
+    }
 
     function getTotalPrice() {
         let bunsPrice = data[0].price * 2;
@@ -59,9 +71,13 @@ function BurgerConstructor({data}) {
             <div className={`${constructorStyles.orderSection} mt-10`}>
                 <span className="text text_type_digits-medium mr-2">{getTotalPrice()}</span>
                 <CurrencyIcon type="primary" />
-                <Button htmlType="button" type="primary" size="medium">Оформить заказ</Button>
+                <Button htmlType="button" type="primary" size="medium" onClick={handleSubmitBtnClick}>Оформить заказ</Button>
             </div>
-
+            {
+                isModalOpened && (<Modal onClose={handleClose}>
+                    <OrderDetails />
+                </Modal>)
+            }
         </section>
     )
 }

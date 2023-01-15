@@ -1,9 +1,22 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import BurgerIngredientsStyles from "../burger-ingredients/burger-ingredients.module.css";
 import BurgerIngredientsElement from "../burger-ingredients-element/burger-ingredients-element";
 import PropTypes, {arrayOf, oneOf} from "prop-types";
+import Modal from "../modal/modal";
+import IngredientDetails from "../ingredient-details/ingredient-details";
 
 function BurgerIngredientsCategory({ingredientType, data}) {
+
+    const [isModalOpened, setIsModalOpened] = useState(false);
+
+    const [selectedIngredient, setSelectedIngredient] = useState({});
+
+    const handleModalClose = () => setIsModalOpened(false);
+
+    const handleIngredientClick = (ingredient) => {
+        setIsModalOpened(true);
+        setSelectedIngredient(ingredient);
+    }
 
     function getCategoryName() {
         let categoryName = "";
@@ -31,10 +44,14 @@ function BurgerIngredientsCategory({ingredientType, data}) {
                             img={item.image}
                             name={item.name}
                             price={item.price}
+                            onClick={() => {handleIngredientClick(item)}}
                         />)
                     )
                 }
             </ul>
+            {isModalOpened && (<Modal header="Детали ингредиента" onClose={handleModalClose}>
+                <IngredientDetails ingredient={selectedIngredient}/>
+            </Modal>)}
         </>
     )
 }

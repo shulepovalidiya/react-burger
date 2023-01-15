@@ -6,7 +6,7 @@ import PropTypes, {arrayOf} from "prop-types";
 
 function Main({data}) {
     return (
-        <main className={MainStyles.main}>
+        <main className={MainStyles.main} >
             <BurgerIngredients data={data} />
             <BurgerConstructor data={data} />
         </main>

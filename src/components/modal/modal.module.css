@@ -1,0 +1,16 @@
+.opened {
+    max-width: 720px;
+    max-height: 718px;
+    border-radius: 40px;
+    z-index: 20;
+    background-color: #000000;
+    opacity: 1;
+    box-shadow: #4C4CFF 0 0 20px;
+    cursor: default;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
