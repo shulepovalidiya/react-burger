@@ -1,8 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext, createContext} from 'react';
 import './App.module.css';
 import AppHeader from "../app-header/app-header";
 import Main from "../main/main";
 import '@ya.praktikum/react-developer-burger-ui-components';
+
+export const IngredientsContext = createContext([]);
 
 function App() {
 
@@ -34,7 +36,12 @@ function App() {
     return (
         <>
             <AppHeader/>
-            {!isLoading && <Main data={ingredientsArray}/>}
+            {!isLoading && (
+                <IngredientsContext.Provider value={{ingredientsArray, setIngredientsArray}}>
+                    <Main />
+                </IngredientsContext.Provider>
+                )
+            }
 
         </>
     );

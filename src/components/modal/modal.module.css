@@ -1,5 +1,5 @@
 .opened {
-    max-width: 720px;
+    min-width: 720px;
     max-height: 718px;
     border-radius: 40px;
     z-index: 20;

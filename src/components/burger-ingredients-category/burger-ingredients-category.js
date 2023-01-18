@@ -1,15 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import BurgerIngredientsStyles from "../burger-ingredients/burger-ingredients.module.css";
 import BurgerIngredientsElement from "../burger-ingredients-element/burger-ingredients-element";
 import PropTypes, {arrayOf, oneOf} from "prop-types";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
+import {IngredientsContext} from "../app/App";
 
-function BurgerIngredientsCategory({ingredientType, data}) {
+function BurgerIngredientsCategory({ingredientType}) {
 
     const [isModalOpened, setIsModalOpened] = useState(false);
-
     const [selectedIngredient, setSelectedIngredient] = useState({});
+
+    const ingredientsArray = useContext(IngredientsContext).ingredientsArray;
 
     const handleModalClose = () => setIsModalOpened(false);
 
@@ -20,18 +22,18 @@ function BurgerIngredientsCategory({ingredientType, data}) {
 
     function getCategoryName() {
         let categoryName = "";
-        if (ingredientType === "bun") {
-            categoryName = "Булки";
-        } else if (ingredientType === "sauce") {
-            categoryName = "Соусы";
-        } else if (ingredientType === "main") {
-            categoryName = "Начинки";
+        switch(ingredientType) {
+            case "bun":
+                return categoryName = "Булки";
+            case "sauce":
+                return categoryName = "Соусы";
+            case "main":
+                return categoryName = "Начинки";
         }
-        return categoryName;
     }
 
     function getIngredientsList() {
-        return data.filter(item => item.type === ingredientType)
+        return ingredientsArray.filter(item => item.type === ingredientType)
     }
 
     return (
@@ -57,7 +59,6 @@ function BurgerIngredientsCategory({ingredientType, data}) {
 }
 
 BurgerIngredientsCategory.propTypes = {
-    data: arrayOf(PropTypes.object).isRequired,
     ingredientType: oneOf(["bun", "sauce", "main"]).isRequired,
 }
 
