@@ -11,7 +11,7 @@ function BurgerIngredientsCategory({ingredientType}) {
     const [isModalOpened, setIsModalOpened] = useState(false);
     const [selectedIngredient, setSelectedIngredient] = useState({});
 
-    const ingredientsArray = useContext(IngredientsContext).ingredientsArray;
+    const ingredientsArray = useContext(IngredientsContext);
 
     const handleModalClose = () => setIsModalOpened(false);
 

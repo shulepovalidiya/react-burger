@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useMemo, useState} from "react";
 import constructorStyles from "./burger-constructor.module.css";
 import {ConstructorElement} from "@ya.praktikum/react-developer-burger-ui-components";
 import {Button} from "@ya.praktikum/react-developer-burger-ui-components";
@@ -7,68 +7,48 @@ import {CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import {IngredientsContext} from "../app/App";
+import api from "../../utils/api";
+import {ingredientTypes} from "../../utils/constants";
 
 function BurgerConstructor() {
 
-    const ingredientsArray = useContext(IngredientsContext).ingredientsArray;
-    const [isModalOpened, setIsModalOpened] = useState(false);
+    const {bun, sauce, main} = ingredientTypes;
+
+    const ingredientsArray = useContext(IngredientsContext);
     const [orderNumber, setOrderNumber] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
 
-    function getOrderNumber() {
-        fetch('https://norma.nomoreparties.space/api/orders', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                ingredients: getIngredientsID(),
-            })
-        }).then(res => {
-            if (res.ok) {
-                return res.json();
-                setIsLoading(true);
-            }
-            return Promise.reject(`Ошибка ${res.status}`);
-        })
-            .then(res => {
-                if (res.success) {
-                    setIsLoading(true);
-                    setOrderNumber(res.order.number);
-                }
-            })
-            .catch(err => console.log(err))
-            .finally(() => setIsLoading(false))
-    }
+    const getOrderItems = () => ingredientsArray.filter(item => item.type !== bun)
 
-    function getIngredientsID() {
+    const memoizedFilteredIngredients = useMemo(getOrderItems, [ingredientsArray])
+
+    const getIngredientsID = () => {
         let ingredientsID = [];
-        getOrderItems().forEach(item => ingredientsID.push(item._id))
+        memoizedFilteredIngredients.forEach(item => ingredientsID.push(item._id))
         return ingredientsID;
     }
 
-    function handleSubmitBtnClick() {
-        getOrderNumber();
-        !isLoading && setIsModalOpened(true);
+    const getOrderNumber = () => {
+        api.getOrderNumber(getIngredientsID())
+            .then(res => {
+                if (res.success) {
+                    setOrderNumber(res.order.number)
+                }})
+            .catch(err => console.log(err))
     }
 
-    function handleClose() {
-        setIsModalOpened(false);
-        setOrderNumber(null);
-    }
+    const handleSubmitBtnClick = () => getOrderNumber();
 
-    function getTotalPrice() {
+    const handleClose = () => setOrderNumber(null);
+
+    const getTotalPrice = () => {
         const bunsPrice = ingredientsArray[0].price * 2;
         let mainsAndSaucesPrice = 0;
-        getOrderItems().forEach(item => {
-            mainsAndSaucesPrice += item.price
-        })
+        memoizedFilteredIngredients.forEach(item => mainsAndSaucesPrice += item.price)
         return mainsAndSaucesPrice + bunsPrice;
     }
 
-    function getOrderItems() {
-       return ingredientsArray.filter(item => item.type !== "bun")
-    }
+    const memoizedTotal = useMemo(getTotalPrice, [ingredientsArray])
+
 
     return (
         <section className={`${constructorStyles.constructor} pt-25 pr-4 pl-4`}>
@@ -82,7 +62,7 @@ function BurgerConstructor() {
             />
             <ul className={constructorStyles.constructorList}>
                 {
-                    getOrderItems().map((item) =>
+                    memoizedFilteredIngredients.map((item) =>
                         (
                             <li key={item._id} className={constructorStyles.constructorItem}>
                                 <DragIcon type="primary"/>
@@ -106,14 +86,16 @@ function BurgerConstructor() {
                 isLocked={true}
             />
             <div className={`${constructorStyles.orderSection} mt-10`}>
-                <span className="text text_type_digits-medium mr-2">{getTotalPrice()}</span>
+                <span className="text text_type_digits-medium mr-2">{memoizedTotal}</span>
                 <CurrencyIcon type="primary" />
                 <Button htmlType="button" type="primary" size="medium" onClick={handleSubmitBtnClick}>Оформить заказ</Button>
             </div>
             {
-                isModalOpened && (<Modal onClose={handleClose}>
-                    <OrderDetails orderNumber={orderNumber}/>
-                </Modal>)
+                orderNumber && (
+                    <Modal onClose={handleClose}>
+                        <OrderDetails orderNumber={orderNumber}/>
+                    </Modal>
+                )
             }
         </section>
     )
