@@ -2,19 +2,19 @@ import React from "react";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import MainStyles from "./main.module.css";
-import PropTypes, {arrayOf} from "prop-types";
+import {DndProvider} from "react-dnd";
+import {HTML5Backend} from "react-dnd-html5-backend";
+
 
 function Main() {
     return (
-        <main className={MainStyles.main} >
-            <BurgerIngredients />
-            <BurgerConstructor />
+        <main className={MainStyles.main}>
+            <DndProvider backend={HTML5Backend}>
+                <BurgerIngredients/>
+                <BurgerConstructor/>
+            </DndProvider>
         </main>
     )
 }
-
-// Main.propTypes = {
-//     data: arrayOf(PropTypes.object).isRequired,
-// }
 
 export default Main;

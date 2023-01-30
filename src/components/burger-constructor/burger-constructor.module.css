@@ -1,6 +1,17 @@
 .constructor {
     max-width: 600px;
     max-height: 912px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+}
+
+.constructorElement {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+
 }
 
 .constructorList {
@@ -8,9 +19,10 @@
     flex-direction: column;
     gap: 16px;
     overflow: auto;
-    max-height: 464px;
-    padding: 0;
+    max-height: 656px;
+    padding: 0 8px 0 0;
     margin: 0;
+    list-style-type: none;
 }
 
 .constructorItem {
@@ -41,10 +53,43 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
 }
 
 .orderSection > svg {
     width: 33px;
     height: 33px;
     margin-right: 40px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow: auto;
+    max-height: 464px;
+    padding: 0;
+    margin: 0;
+}
+
+.default {
+    min-width: 536px;
+    min-height: 80px;
+    background-color: #1C1C21;
+    border-radius: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #8585AD;
+}
+
+.top {
+    border-radius: 88px 88px 40px 40px;
+}
+
+.bottom {
+    border-radius: 40px 40px 88px 88px;
 }
