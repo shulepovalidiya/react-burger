@@ -5,12 +5,13 @@ import {useDispatch} from "react-redux";
 import {useDrag, useDrop} from "react-dnd";
 import styles from './burger-constructor-draggable-element.module.css'
 
-export default function BurgerConstructorDraggableElement({ingredient, index, id}) {
+export default function BurgerConstructorDraggableElement({ingredient, index}) {
 
     const {name, image, price} = ingredient;
 
 
     const dispatch = useDispatch();
+
     const handleDelete = (index) => {
         dispatch({
             type: DELETE_INGREDIENT,

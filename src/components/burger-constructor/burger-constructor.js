@@ -1,4 +1,4 @@
-import React, {useMemo, useRef} from "react";
+import React, {useMemo} from "react";
 import constructorStyles from "./burger-constructor.module.css";
 import {
     ConstructorElement,
@@ -18,6 +18,7 @@ import {
     getOrderNumber,
 } from "../../services/actions/burger-ingredients";
 import {useDrop} from "react-dnd";
+import { v4 as uuidv4 } from 'uuid';
 
 function BurgerConstructor() {
 
@@ -69,7 +70,10 @@ function BurgerConstructor() {
                 })
                 : dispatch({
                     type: INGREDIENT_DROP,
-                    data: ingredients.find(ingredient => ingredient._id === itemId.id),
+                    data: {
+                        ...ingredients.find(ingredient => ingredient._id === itemId.id),
+                        uuid: uuidv4(),
+                    },
                 })
         },
 
@@ -96,8 +100,7 @@ function BurgerConstructor() {
                             <BurgerConstructorDraggableElement
                                 ingredient={ingredient}
                                 index={index}
-                                id={ingredient._id}
-                                key={ingredient._id}/>)
+                                key={ingredient.uuid}/>)
                         : (<div className={constructorStyles.default}>
                             <p className="text text_type_main-default text_color_inactive">Выберите начинку</p>
                         </div>)

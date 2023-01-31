@@ -13,15 +13,10 @@ function BurgerIngredientsElement({id}) {
     const ingredientData = useSelector(state => state.ingredients.ingredients.find(item => item._id === id))
     const {ingredients, draggedIngredients, currentBun} = useSelector(state => state.ingredients)
 
-    const [{isDrag, didDrop}, dragRef, dragPreviewRef] = useDrag({
+    const [{}, dragRef, dragPreviewRef] = useDrag({
         type: "ingredient",
         item: {id},
-        collect: monitor => ({
-            isBunDrag: monitor.isDragging(),
-            didBunDrop: monitor.didDrop(),
-        })
     });
-
 
     const handleIngredientClick = () => {
         dispatch({
