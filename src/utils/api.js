@@ -5,6 +5,10 @@ class Api {
         this.base_url = options.url;
     }
 
+    _request(url, options) {
+        return fetch(url, options).then(res => this._getResponseData(res))
+    }
+
     _getResponseData(res) {
         if (!res.ok) {
             return Promise.reject(`Ошибка: ${res.status}`);
@@ -13,12 +17,11 @@ class Api {
     }
 
     getIngredientsArray() {
-        return fetch(`${this.base_url}/ingredients`)
-            .then(res => this._getResponseData(res))
+        return this._request(`${this.base_url}/ingredients`, {})
     }
 
     getOrderNumber(ingredientsID) {
-        return fetch(`${this.base_url}/orders`, {
+        return this._request(`${this.base_url}/orders`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -27,7 +30,6 @@ class Api {
                 ingredients: ingredientsID,
             })
         })
-            .then(res => this._getResponseData(res))
     }
 }
 

@@ -1,94 +1,132 @@
-import React, {useContext, useMemo, useState} from "react";
+import React, {useMemo} from "react";
 import constructorStyles from "./burger-constructor.module.css";
-import {ConstructorElement} from "@ya.praktikum/react-developer-burger-ui-components";
-import {Button} from "@ya.praktikum/react-developer-burger-ui-components";
-import {DragIcon} from "@ya.praktikum/react-developer-burger-ui-components";
-import {CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
+import {
+    ConstructorElement,
+    Button,
+    CurrencyIcon
+} from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-import {IngredientsContext} from "../app/App";
-import api from "../../utils/api";
 import {ingredientTypes} from "../../utils/constants";
+import {useDispatch, useSelector} from "react-redux";
+import BurgerConstructorDraggableElement
+    from "../burger-constructor-draggable-element/burger-constructor-draggable-element";
+import {
+    BUN_DROP,
+    CLOSE_ORDER_MODAL,
+    INGREDIENT_DROP,
+    getOrderNumber,
+} from "../../services/actions/burger-ingredients";
+import {useDrop} from "react-dnd";
+import { v4 as uuidv4 } from 'uuid';
 
 function BurgerConstructor() {
 
-    const {bun, sauce, main} = ingredientTypes;
+    const dispatch = useDispatch();
 
-    const ingredientsArray = useContext(IngredientsContext);
-    const [orderNumber, setOrderNumber] = useState(null);
-
-    const getOrderItems = () => ingredientsArray.filter(item => item.type !== bun)
-
-    const memoizedFilteredIngredients = useMemo(getOrderItems, [ingredientsArray])
+    const {bun} = ingredientTypes;
+    const {
+        ingredients,
+        draggedIngredients,
+        currentBun,
+        orderNumber
+    } = useSelector(state => state.ingredients)
 
     const getIngredientsID = () => {
         let ingredientsID = [];
-        memoizedFilteredIngredients.forEach(item => ingredientsID.push(item._id))
+        ingredientsID.push(currentBun._id);
+        draggedIngredients.forEach(item => ingredientsID.push(item._id))
+        ingredientsID.push(currentBun._id);
         return ingredientsID;
     }
 
-    const getOrderNumber = () => {
-        api.getOrderNumber(getIngredientsID())
-            .then(res => {
-                if (res.success) {
-                    setOrderNumber(res.order.number)
-                }})
-            .catch(err => console.log(err))
-    }
+    const handleSubmitBtnClick = () => dispatch(getOrderNumber(getIngredientsID()));
 
-    const handleSubmitBtnClick = () => getOrderNumber();
-
-    const handleClose = () => setOrderNumber(null);
+    const handleClose = () => dispatch({type: CLOSE_ORDER_MODAL});
 
     const getTotalPrice = () => {
-        const bunsPrice = ingredientsArray[0].price * 2;
-        let mainsAndSaucesPrice = 0;
-        memoizedFilteredIngredients.forEach(item => mainsAndSaucesPrice += item.price)
-        return mainsAndSaucesPrice + bunsPrice;
+        let totalPrice = 0;
+        if (currentBun) {
+            totalPrice += currentBun.price * 2;
+        }
+        totalPrice += draggedIngredients.reduce((sum, current) => sum + current.price, 0)
+        return totalPrice;
     }
 
-    const memoizedTotal = useMemo(getTotalPrice, [ingredientsArray])
+    const memoizedTotalPrice = useMemo(getTotalPrice, [draggedIngredients, currentBun])
 
+    const getIngredientTypeById = (id) => {
+        const ingredientData = ingredients.find(ingredient => ingredient._id === id)
+        return ingredientData.type;
+    }
+
+    const [{}, dropTarget] = useDrop({
+        accept: "ingredient",
+        drop(itemId) {
+            getIngredientTypeById(itemId.id) === bun
+                ? dispatch({
+                    type: BUN_DROP,
+                    data: ingredients.find(ingredient => ingredient._id === itemId.id),
+                })
+                : dispatch({
+                    type: INGREDIENT_DROP,
+                    data: {
+                        ...ingredients.find(ingredient => ingredient._id === itemId.id),
+                        uuid: uuidv4(),
+                    },
+                })
+        },
+
+    });
 
     return (
         <section className={`${constructorStyles.constructor} pt-25 pr-4 pl-4`}>
-            <ConstructorElement
-                text={`${ingredientsArray[0].name} (верх)`}
-                thumbnail={ingredientsArray[0].image}
-                price={ingredientsArray[0].price}
-                extraClass="mr-4 mb-4 ml-8"
-                type="top"
-                isLocked={true}
-            />
-            <ul className={constructorStyles.constructorList}>
-                {
-                    memoizedFilteredIngredients.map((item) =>
-                        (
-                            <li key={item._id} className={constructorStyles.constructorItem}>
-                                <DragIcon type="primary"/>
-                                <ConstructorElement
-                                    text={item.name}
-                                    thumbnail={item.image}
-                                    price={item.price}
-                                    extraClass={`mr-4`}
-                                />
-                            </li>
-                            )
-                    )
+            <div className={constructorStyles.constructorList} ref={dropTarget}>
+                {!currentBun
+                    ? (<div className={`${constructorStyles.top} ${constructorStyles.default}`}>
+                        <p className="text text_type_main-default text_color_inactive">Выберите булку</p>
+                    </div>)
+                    : (<ConstructorElement
+                        text={`${currentBun.name} (верх)`}
+                        thumbnail={currentBun.image}
+                        price={currentBun.price}
+                        type={"top"}
+                        isLocked={true}
+                        extraClass={"ml-6"}/>)
                 }
-            </ul>
-            <ConstructorElement
-                text={`${ingredientsArray[0].name} (низ)`}
-                thumbnail={ingredientsArray[0].image}
-                price={ingredientsArray[0].price}
-                extraClass="mb-10 mr-4 mt-4 ml-8"
-                type="bottom"
-                isLocked={true}
-            />
+                <ul className={constructorStyles.constructorList}>
+                    {draggedIngredients.length !== 0
+                        ? draggedIngredients.map((ingredient, index) =>
+                            <BurgerConstructorDraggableElement
+                                ingredient={ingredient}
+                                index={index}
+                                key={ingredient.uuid}/>)
+                        : (<div className={constructorStyles.default}>
+                            <p className="text text_type_main-default text_color_inactive">Выберите начинку</p>
+                        </div>)
+                    }
+                </ul>
+
+                {!currentBun
+                    ? (<div className={`${constructorStyles.bottom} ${constructorStyles.default}`}>
+                        <p className="text text_type_main-default text_color_inactive">Выберите булку</p>
+                    </div>)
+                    : (<ConstructorElement
+                        text={`${currentBun.name} (низ)`}
+                        thumbnail={currentBun.image}
+                        price={currentBun.price}
+                        type={"bottom"}
+                        isLocked={true}
+                        extraClass={"ml-6"}
+                    />)}
+            </div>
             <div className={`${constructorStyles.orderSection} mt-10`}>
-                <span className="text text_type_digits-medium mr-2">{memoizedTotal}</span>
-                <CurrencyIcon type="primary" />
-                <Button htmlType="button" type="primary" size="medium" onClick={handleSubmitBtnClick}>Оформить заказ</Button>
+                <span className="text text_type_digits-medium mr-2">{memoizedTotalPrice}</span>
+                <CurrencyIcon type="primary"/>
+                <Button htmlType="button" type="primary" size="medium" onClick={handleSubmitBtnClick}
+                        disabled={!currentBun}>
+                    Оформить заказ
+                </Button>
             </div>
             {
                 orderNumber && (

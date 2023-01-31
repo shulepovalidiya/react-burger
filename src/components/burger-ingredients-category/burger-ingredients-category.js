@@ -1,23 +1,20 @@
-import React, {useContext, useEffect, useState} from "react";
+import React from "react";
 import BurgerIngredientsStyles from "../burger-ingredients/burger-ingredients.module.css";
 import BurgerIngredientsElement from "../burger-ingredients-element/burger-ingredients-element";
-import PropTypes, {arrayOf, oneOf} from "prop-types";
+import {oneOf} from "prop-types";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import {IngredientsContext} from "../app/App";
+import { useSelector, useDispatch} from "react-redux";
+import {CLOSE_INGREDIENTS_MODAL} from "../../services/actions/burger-ingredients";
 
 function BurgerIngredientsCategory({ingredientType}) {
 
-    const [isModalOpened, setIsModalOpened] = useState(false);
-    const [selectedIngredient, setSelectedIngredient] = useState({});
+    const dispatch = useDispatch();
 
-    const ingredientsArray = useContext(IngredientsContext);
+    const {ingredients, currentIngredient} = useSelector(state => state.ingredients);
 
-    const handleModalClose = () => setIsModalOpened(false);
-
-    const handleIngredientClick = (ingredient) => {
-        setIsModalOpened(true);
-        setSelectedIngredient(ingredient);
+    const closeIngredientModal = () => {
+        dispatch({type: CLOSE_INGREDIENTS_MODAL});
     }
 
     function getCategoryName() {
@@ -33,7 +30,7 @@ function BurgerIngredientsCategory({ingredientType}) {
     }
 
     function getIngredientsList() {
-        return ingredientsArray.filter(item => item.type === ingredientType)
+        return ingredients.filter(item => item.type === ingredientType)
     }
 
     return (
@@ -41,18 +38,13 @@ function BurgerIngredientsCategory({ingredientType}) {
             <h2 className="text text_type_main-medium mt-10">{getCategoryName()}</h2>
             <ul className={BurgerIngredientsStyles.productSection}>
                 {
-                    getIngredientsList().map(item => (<BurgerIngredientsElement
-                            key={item._id}
-                            img={item.image}
-                            name={item.name}
-                            price={item.price}
-                            onClick={() => {handleIngredientClick(item)}}
-                        />)
+                    getIngredientsList().map(item =>
+                        <BurgerIngredientsElement key={item._id} id={item._id}/>
                     )
                 }
             </ul>
-            {isModalOpened && (<Modal header="Детали ингредиента" onClose={handleModalClose}>
-                <IngredientDetails ingredient={selectedIngredient}/>
+            {currentIngredient && (<Modal header="Детали ингредиента" onClose={closeIngredientModal}>
+                <IngredientDetails/>
             </Modal>)}
         </>
     )

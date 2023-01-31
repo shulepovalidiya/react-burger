@@ -23,7 +23,7 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    max-height: 634px;
+    max-height: 716px;
     max-width: 600px;
     overflow: auto;
     box-sizing: border-box;
@@ -36,11 +36,11 @@
 
 .ingredientsList::-webkit-scrollbar-thumb {
     background-color: #8585AD;
-    max-height: 492px;
+    /*max-height: 492px;*/
 }
 
 .ingredientsList::-webkit-scrollbar-track {
-    max-height: 664px;
+    /*max-height: 664px;*/
     margin: 40px 0 52px 0;
 }
 

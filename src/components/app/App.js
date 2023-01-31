@@ -1,33 +1,24 @@
-import React, {useEffect, useState, useContext, createContext} from 'react';
+import React, {useEffect} from 'react';
 import './App.module.css';
 import AppHeader from "../app-header/app-header";
 import Main from "../main/main";
 import '@ya.praktikum/react-developer-burger-ui-components';
-import api from "../../utils/api";
-export const IngredientsContext = createContext([]);
+import {useDispatch, useSelector} from "react-redux";
+import {getIngredients} from "../../services/actions/burger-ingredients";
 
 function App() {
 
-    const [ingredientsArray, setIngredientsArray] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const dispatch = useDispatch();
 
-    const getIngredientsArray = () => {
-        setIsLoading(true);
-        api.getIngredientsArray()
-            .then(res => setIngredientsArray(res.data))
-            .catch(err => console.log(err))
-            .finally(() => setIsLoading(false))
-    }
+    const {ingredients, ingredientsRequest} = useSelector(state => state.ingredients)
 
-    useEffect(getIngredientsArray, [])
+    useEffect(() => dispatch(getIngredients()), [dispatch])
 
     return (
         <>
             <AppHeader/>
-            {!isLoading && (
-                <IngredientsContext.Provider value={ingredientsArray}>
+            {(!ingredientsRequest && ingredients.length) && (
                     <Main />
-                </IngredientsContext.Provider>
                 )
             }
 
