@@ -19,18 +19,22 @@ import {
 } from "../../services/actions/burger-ingredients";
 import {useDrop} from "react-dnd";
 import { v4 as uuidv4 } from 'uuid';
+import {useNavigate} from "react-router-dom";
 
 function BurgerConstructor() {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const {bun} = ingredientTypes;
     const {
         ingredients,
         draggedIngredients,
         currentBun,
-        orderNumber
+        orderNumber,
     } = useSelector(state => state.ingredients)
+
+    const {loggedIn} = useSelector(state => state.auth)
 
     const getIngredientsID = () => {
         let ingredientsID = [];
@@ -40,7 +44,12 @@ function BurgerConstructor() {
         return ingredientsID;
     }
 
-    const handleSubmitBtnClick = () => dispatch(getOrderNumber(getIngredientsID()));
+    const handleSubmitBtnClick = () => {
+        console.log(loggedIn)
+        loggedIn
+            ? dispatch(getOrderNumber(getIngredientsID()))
+            : navigate("/login")
+    };
 
     const handleClose = () => dispatch({type: CLOSE_ORDER_MODAL});
 

@@ -3,11 +3,14 @@ import ElementStyles from "./burger-ingredients-element.module.css";
 import PropTypes from "prop-types";
 import {Counter} from "@ya.praktikum/react-developer-burger-ui-components";
 import {CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
-import {INGREDIENT_CLICK, INGREDIENT_DROP} from "../../services/actions/burger-ingredients";
+import {INGREDIENT_CLICK} from "../../services/actions/burger-ingredients";
 import {useDispatch, useSelector} from "react-redux";
 import {useDrag} from "react-dnd";
+import {Link, useLocation} from "react-router-dom";
 
 function BurgerIngredientsElement({id}) {
+
+    const location = useLocation();
 
     const dispatch = useDispatch();
     const ingredientData = useSelector(state => state.ingredients.ingredients.find(item => item._id === id))
@@ -24,7 +27,6 @@ function BurgerIngredientsElement({id}) {
             data: ingredientData,
         })
     };
-
 
     const getIngredientCount = (id) => {
         let count = 0;
@@ -55,26 +57,26 @@ function BurgerIngredientsElement({id}) {
     }
 
     return (
-        <figure
-            className={`${ElementStyles.card}`} onClick={handleIngredientClick}
-            ref={dragRef}
-            draggable
-        >
-            {(getCounterValue(id) !== 0) &&
-                <Counter
-                    count={getCounterValue(ingredientData._id)}
-                    size="default"
-                    extraClass="m-1"/>}
-            <img src={ingredientData.image} className="mt-0 mr-4 ml-4 mb-1" alt={ingredientData.name}
-                 ref={dragPreviewRef}/>
-            <figcaption className="text text_type_main-default">
-                <div className={`${ElementStyles.price} mb-1`}>
-                    <span>{ingredientData.price}</span>
-                    <CurrencyIcon type="primary"/>
-                </div>
-                <p className={ElementStyles.name}>{ingredientData.name}</p>
-            </figcaption>
-        </figure>
+
+            <figure
+                className={`${ElementStyles.card}`} onClick={handleIngredientClick}
+                ref={dragRef}
+                draggable>
+                {(getCounterValue(id) !== 0) &&
+                    <Counter
+                        count={getCounterValue(ingredientData._id)}
+                        size="default"
+                        extraClass="m-1"/>}
+                <img src={ingredientData.image} className="mt-0 mr-4 ml-4 mb-1" alt={ingredientData.name}
+                     ref={dragPreviewRef}/>
+                <figcaption className="text text_type_main-default">
+                    <div className={`${ElementStyles.price} mb-1`}>
+                        <span>{ingredientData.price}</span>
+                        <CurrencyIcon type="primary"/>
+                    </div>
+                    <p className={ElementStyles.name}>{ingredientData.name}</p>
+                </figcaption>
+            </figure>
     )
 }
 

@@ -4,8 +4,13 @@ import {createPortal} from "react-dom";
 import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import PropTypes from "prop-types";
+import {useDispatch} from "react-redux";
+import {useNavigate} from "react-router-dom";
 
 function Modal({children, header, onClose}) {
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const closeByEsc = (e) => {
         if (e.key === "Escape") {

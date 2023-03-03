@@ -2,29 +2,27 @@ import React from "react";
 import BurgerIngredientsStyles from "../burger-ingredients/burger-ingredients.module.css";
 import BurgerIngredientsElement from "../burger-ingredients-element/burger-ingredients-element";
 import {oneOf} from "prop-types";
-import Modal from "../modal/modal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
-import { useSelector, useDispatch} from "react-redux";
-import {CLOSE_INGREDIENTS_MODAL} from "../../services/actions/burger-ingredients";
+import { useSelector, } from "react-redux";
+import {useLocation, Link} from "react-router-dom";
+import {ingredientTypes} from "../../utils/constants";
+import styles from "./burger-ingredients-category.module.css"
 
 function BurgerIngredientsCategory({ingredientType}) {
 
-    const dispatch = useDispatch();
+    const location = useLocation();
 
-    const {ingredients, currentIngredient} = useSelector(state => state.ingredients);
+    const {bun, sauce, main} = ingredientTypes;
 
-    const closeIngredientModal = () => {
-        dispatch({type: CLOSE_INGREDIENTS_MODAL});
-    }
+    const {ingredients} = useSelector(state => state.ingredients);
 
     function getCategoryName() {
         let categoryName = "";
         switch(ingredientType) {
-            case "bun":
+            case bun:
                 return categoryName = "Булки";
-            case "sauce":
+            case sauce:
                 return categoryName = "Соусы";
-            case "main":
+            case main:
                 return categoryName = "Начинки";
         }
     }
@@ -38,14 +36,15 @@ function BurgerIngredientsCategory({ingredientType}) {
             <h2 className="text text_type_main-medium mt-10">{getCategoryName()}</h2>
             <ul className={BurgerIngredientsStyles.productSection}>
                 {
-                    getIngredientsList().map(item =>
-                        <BurgerIngredientsElement key={item._id} id={item._id}/>
+                    getIngredientsList().map(ingredient =>
+                        <li key={ingredient._id} className={styles.listElement}>
+                            <Link className={styles.link} to={`/ingredients/${ingredient._id}`} state={{backgroundLocation: location}}>
+                                <BurgerIngredientsElement id={ingredient._id}/>
+                            </Link>
+                        </li>
                     )
                 }
             </ul>
-            {currentIngredient && (<Modal header="Детали ингредиента" onClose={closeIngredientModal}>
-                <IngredientDetails/>
-            </Modal>)}
         </>
     )
 }

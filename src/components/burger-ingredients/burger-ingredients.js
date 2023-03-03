@@ -47,8 +47,6 @@ function BurgerIngredients() {
                         <li id={main} ref={ref}><BurgerIngredientsCategory ingredientType={main}/></li>
                     )}
                 </InView>
-
-
             </ul>
         </section>
     )
