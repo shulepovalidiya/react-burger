@@ -149,10 +149,10 @@ export function sendPasswordRecoveryCode(email) {
         })
         api.sendPasswordRecoveryCode(email)
             .then(() => dispatch({
-                type: RESET_PASSWORD_SUCCESS,
+                type: RECOVERY_CODE_SUCCESS,
             }))
             .catch(() => dispatch({
-                type: RESET_PASSWORD_FAILED,
+                type: RECOVERY_CODE_FAILED,
             }))
     }
 }

@@ -6,11 +6,8 @@ import {CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import {INGREDIENT_CLICK} from "../../services/actions/burger-ingredients";
 import {useDispatch, useSelector} from "react-redux";
 import {useDrag} from "react-dnd";
-import {Link, useLocation} from "react-router-dom";
 
 function BurgerIngredientsElement({id}) {
-
-    const location = useLocation();
 
     const dispatch = useDispatch();
     const ingredientData = useSelector(state => state.ingredients.ingredients.find(item => item._id === id))

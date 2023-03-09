@@ -19,7 +19,7 @@ import {
 } from "../../services/actions/burger-ingredients";
 import {useDrop} from "react-dnd";
 import { v4 as uuidv4 } from 'uuid';
-import {useNavigate} from "react-router-dom";
+import {useNavigate, Outlet} from "react-router-dom";
 
 function BurgerConstructor() {
 
@@ -45,7 +45,6 @@ function BurgerConstructor() {
     }
 
     const handleSubmitBtnClick = () => {
-        console.log(loggedIn)
         loggedIn
             ? dispatch(getOrderNumber(getIngredientsID()))
             : navigate("/login")

@@ -15,6 +15,8 @@ import ProtectedRouteElement from "../protected-route-element/protected-route-el
 import {checkUserAuth} from "../../services/actions/auth";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from "../modal/modal";
+import Orders from "../../pages/orders/orders";
+import UserInfo from "../user-info/user-info";
 
 function App() {
 
@@ -34,7 +36,8 @@ function App() {
         <>
             <AppHeader/>
             <Routes location={state?.backgroundLocation || location}>
-                <Route path={"/"} exact element={(!ingredientsRequest && ingredients.length) && <Main/>}/>
+                <Route path={"/"}  element={(!ingredientsRequest && ingredients.length) && <Main/>}>
+                </Route>
                 <Route path={"/login"}
                        element={<ProtectedRouteElement onlyUnAuth={true}><SignIn/></ProtectedRouteElement>}/>
                 <Route path={"/register"}
@@ -43,7 +46,10 @@ function App() {
                        element={<ProtectedRouteElement onlyUnAuth={true}><ForgotPassword/></ProtectedRouteElement>}/>
                 <Route path={"/reset-password"}
                        element={<ProtectedRouteElement onlyUnAuth={true}><ResetPassword/></ProtectedRouteElement>}/>
-                <Route path={"/profile"} element={<ProtectedRouteElement><Profile/></ProtectedRouteElement>}/>
+                <Route path={"/profile"} exact element={<ProtectedRouteElement><Profile/></ProtectedRouteElement>}>
+                    <Route index exact element={<ProtectedRouteElement><UserInfo/></ProtectedRouteElement>} />
+                    <Route path={"/profile/orders"} exact element={<ProtectedRouteElement><Orders/></ProtectedRouteElement>} />
+                </Route>
                 <Route path={"/ingredients/:id"} element={<IngredientDetails/>}/>
             </Routes>
             {state?.backgroundLocation && (
@@ -53,7 +59,8 @@ function App() {
                             <IngredientDetails isModal={true}/>
                         </Modal>}
                     />
-                </Routes>)}
+                </Routes>
+            )}
         </>
     );
 }

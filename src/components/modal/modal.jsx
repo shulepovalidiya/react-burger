@@ -4,29 +4,17 @@ import {createPortal} from "react-dom";
 import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import PropTypes from "prop-types";
-import {useDispatch} from "react-redux";
-import {useNavigate} from "react-router-dom";
 
 function Modal({children, header, onClose}) {
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const closeByEsc = (e) => e.key === "Escape" && onClose();
 
-    const closeByEsc = (e) => {
-        if (e.key === "Escape") {
-            onClose();
-        }
-    }
-
-    const closeByOverlayClick = (e) => {
-        if (e.target.classList.contains("modal-overlay")) {
-            onClose();
-        }
-    }
+    const closeByOverlayClick = (e) => e.target.classList.contains("modal-overlay") && onClose();
 
     useEffect(() => {
         document.addEventListener('keydown', closeByEsc)
         document.addEventListener('click', closeByOverlayClick)
+
         return () => {
             document.removeEventListener('keydown', closeByEsc)
             document.removeEventListener('click', closeByOverlayClick)

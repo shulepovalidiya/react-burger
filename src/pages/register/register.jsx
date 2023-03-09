@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import FormTemplate from "../../components/form-template/form-template";
 import {EmailInput, PasswordInput, Input} from "@ya.praktikum/react-developer-burger-ui-components";
 import NavCaption from "../../components/nav-caption/nav-caption";
 import {register} from "../../services/actions/auth";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import useForm from "../../hooks/use-form";
 
 export default function Register() {
 
@@ -12,9 +13,13 @@ export default function Register() {
 
     const dispatch = useDispatch();
 
-    const [email, setEmail] = useState('');
-    const [name, setName] = useState('');
-    const [password, setPassword] = useState('');
+    const {values, handleChange} = useForm({
+        email: '',
+        name: '',
+        password: ''
+    });
+
+    const { email, name, password } = values;
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -25,12 +30,11 @@ export default function Register() {
     return (
         <section>
             <FormTemplate header={"Регистрация"} buttonText={"Зарегистрироваться"} handleSubmit={handleSubmit}>
-                <Input placeholder={"Имя"} value={name} onChange={e => setName(e.target.value)}/>
-                <EmailInput value={email} onChange={e => setEmail(e.target.value)} />
-                <PasswordInput value={password} onChange={e => setPassword(e.target.value)}/>
+                <Input placeholder={"Имя"} value={name} onChange={e => handleChange(e)} name={"name"}/>
+                <EmailInput value={email} onChange={e => handleChange(e)} name={"email"}/>
+                <PasswordInput value={password} onChange={e => handleChange(e)} name={"password"}/>
             </FormTemplate>
             <NavCaption text={"Уже зарегистрированы?"} linkText={"Войти"} to={"/login"}/>
         </section>
-
     )
 }

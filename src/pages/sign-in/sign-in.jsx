@@ -5,6 +5,7 @@ import NavCaption from "../../components/nav-caption/nav-caption";
 import {useDispatch} from "react-redux";
 import {authorize} from "../../services/actions/auth";
 import {useNavigate} from "react-router-dom";
+import useForm from "../../hooks/use-form";
 
 
 export default function SignIn() {
@@ -12,8 +13,9 @@ export default function SignIn() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const {values, handleChange} = useForm({email: '', password: ''})
+
+    const {email, password} = values;
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -24,8 +26,8 @@ export default function SignIn() {
     return (
         <section>
             <FormTemplate header="Вход" buttonText="Войти" handleSubmit={handleSubmit}>
-                <EmailInput value={email} onChange={(e) => setEmail(e.target.value)}/>
-                <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)}/>
+                <EmailInput value={email} onChange={e => handleChange(e)} name={"email"}/>
+                <PasswordInput value={password} onChange={e => handleChange(e)} name={"password"}/>
             </FormTemplate>
             <NavCaption text={"Вы — новый пользователь? "} linkText={"Зарегистрироваться"} to={"/register"}/>
             <NavCaption text={"Забыли пароль? "} linkText={"Восстановить пароль"} to={"/forgot-password"}/>

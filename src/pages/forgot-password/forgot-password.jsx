@@ -19,10 +19,14 @@ export default function ForgotPassword() {
         navigate("/reset-password");
     }
 
+    const handleChange = (e) => {
+        setEmail(e.target.value)
+    }
+
     return (
         <>
             <FormTemplate header="Восстановление пароля" buttonText="Восстановить" handleSubmit={handleSubmit}>
-                <EmailInput value={email} onChange={e => setEmail(e.target.value)}/>
+                <EmailInput value={email} onChange={e => handleChange(e)}/>
             </FormTemplate>
             <NavCaption text={"Вспомнили пароль?"} linkText={"Войти"} to={"/login"}/>
         </>

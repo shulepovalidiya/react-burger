@@ -33,6 +33,7 @@ import {
 const initialState = {
     authChecked: false,
     loggedIn: !!localStorage.getItem("accessToken"),
+    isResetPasswordAvailable: false,
     registrationRequest: false,
     registrationFailed: false,
     currentLogin: "",
@@ -153,7 +154,6 @@ export const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loggedIn: false,
-                authChecked: false,
                 logoutRequest: false,
             }
         }
@@ -186,12 +186,15 @@ export const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 recoveryCodeRequest: true,
+                // isResetPasswordAvailable: true,
+
             }
         }
         case RECOVERY_CODE_SUCCESS: {
             return {
                 ...state,
                 recoveryCodeRequest: false,
+                isResetPasswordAvailable: true,
             }
         }
         case RECOVERY_CODE_FAILED: {

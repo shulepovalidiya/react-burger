@@ -1,11 +1,10 @@
 import React from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function ProtectedRouteElement({onlyUnAuth = false, children}) {
 
-        const {loggedIn, authChecked, currentName} = useSelector(store => store.auth);
-        const navigate = useNavigate();
+        const {loggedIn, authChecked} = useSelector(store => store.auth);
 
         if (!authChecked) {
                 return null;
@@ -13,12 +12,10 @@ export default function ProtectedRouteElement({onlyUnAuth = false, children}) {
 
         if (onlyUnAuth && loggedIn) {
                 return <Navigate to={"/"} replace={true}/>
-                // navigate("/");
         }
 
         if (!onlyUnAuth && !loggedIn ) {
                 return <Navigate to={"/login"} replace={true}/>
-                // navigate("/login");
         }
 
         // !onlyUnAuth && user
