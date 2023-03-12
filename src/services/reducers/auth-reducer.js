@@ -186,8 +186,6 @@ export const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 recoveryCodeRequest: true,
-                // isResetPasswordAvailable: true,
-
             }
         }
         case RECOVERY_CODE_SUCCESS: {

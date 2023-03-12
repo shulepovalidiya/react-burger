@@ -32,9 +32,9 @@ export default function ResetPassword() {
             ? (<section>
                 <FormTemplate header={"Восстановление пароля"} buttonText={"Сохранить"} handleSubmit={handleSubmit}>
                     <PasswordInput placeholder={"Введите новый пароль"} value={password}
-                                   onChange={(e) => handleChange(e)} name={"password"}/>
+                                   onChange={(e) => handleChange(e)} name={"password"} required/>
                     <Input placeholder={"Введите код из письма"} value={resetCode}
-                           onChange={(e) => handleChange(e)} name={"resetCode"}/>
+                           onChange={(e) => handleChange(e)} name={"resetCode"} required/>
                 </FormTemplate>
                 <NavCaption text={"Вспомнили пароль?"} linkText={"Войти"} to={"/login"}/>
             </section>)
