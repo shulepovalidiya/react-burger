@@ -1,0 +1,15 @@
+.span {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.link {
+    color: #4C4CFF;
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}

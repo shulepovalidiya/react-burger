@@ -7,21 +7,14 @@ import PropTypes from "prop-types";
 
 function Modal({children, header, onClose}) {
 
-    const closeByEsc = (e) => {
-        if (e.key === "Escape") {
-            onClose();
-        }
-    }
+    const closeByEsc = (e) => e.key === "Escape" && onClose();
 
-    const closeByOverlayClick = (e) => {
-        if (e.target.classList.contains("modal-overlay")) {
-            onClose();
-        }
-    }
+    const closeByOverlayClick = (e) => e.target.classList.contains("modal-overlay") && onClose();
 
     useEffect(() => {
         document.addEventListener('keydown', closeByEsc)
         document.addEventListener('click', closeByOverlayClick)
+
         return () => {
             document.removeEventListener('keydown', closeByEsc)
             document.removeEventListener('click', closeByOverlayClick)

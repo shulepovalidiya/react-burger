@@ -11,11 +11,18 @@ import {
     GET_ORDER_NUMBER_REQUEST,
     GET_ORDER_NUMBER_SUCCESS,
 
-    INGREDIENT_DROP, BUN_DROP, DELETE_INGREDIENT, CLOSE_ORDER_MODAL, REORDER_INGREDIENTS, CUT_INGREDIENT
+    INGREDIENT_DROP,
+    BUN_DROP,
+    DELETE_INGREDIENT,
+    CLOSE_ORDER_MODAL,
+    REORDER_INGREDIENTS,
+    CUT_INGREDIENT,
 } from "../actions/burger-ingredients";
+
 
 const initialState = {
     ingredients: [],
+    backgroundLocation: null,
     ingredientsRequest: false,
     ingredientsFailed: false,
     draggedIngredient: {},
@@ -28,6 +35,11 @@ const initialState = {
     orderNumberRequest: false,
     orderNumberRequestFailed: false,
     reorderedIngredients: [],
+    registrationRequest: false,
+    registrationRequestFailed: false,
+    currentLogin: null,
+    currentToken: null,
+    currentName: null,
 }
 
 export const ingredientsReducer = (state = initialState, action) => {
@@ -129,6 +141,8 @@ export const ingredientsReducer = (state = initialState, action) => {
         }
     }
 }
+
+
 
 
 
