@@ -19,7 +19,10 @@ import {
 } from "../../services/actions/burger-ingredients";
 import {useDrop} from "react-dnd";
 import { v4 as uuidv4 } from 'uuid';
-import {useNavigate, Outlet} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import {RootState} from "../../index";
+import {TIngredient, TIngredientType} from "../app/App";
+
 
 function BurgerConstructor() {
 
@@ -32,9 +35,14 @@ function BurgerConstructor() {
         draggedIngredients,
         currentBun,
         orderNumber,
-    } = useSelector(state => state.ingredients)
+    } : {
+        ingredients: TIngredient[],
+        draggedIngredients: TIngredient[],
+        currentBun: TIngredient,
+        orderNumber: number,
+    } = useSelector((state: RootState) => state.ingredients)
 
-    const {loggedIn} = useSelector(state => state.auth)
+    const {loggedIn} = useSelector((state: RootState) => state.auth)
 
     const getIngredientsID = () => {
         let ingredientsID = [];
@@ -46,7 +54,7 @@ function BurgerConstructor() {
 
     const handleSubmitBtnClick = () => {
         loggedIn
-            ? dispatch(getOrderNumber(getIngredientsID()))
+            ? dispatch(getOrderNumber(getIngredientsID()) as any)
             : navigate("/login")
     };
 
@@ -63,14 +71,14 @@ function BurgerConstructor() {
 
     const memoizedTotalPrice = useMemo(getTotalPrice, [draggedIngredients, currentBun])
 
-    const getIngredientTypeById = (id) => {
-        const ingredientData = ingredients.find(ingredient => ingredient._id === id)
+    const getIngredientTypeById = (id: string): TIngredientType => {
+        const ingredientData: TIngredient = ingredients.find(ingredient => ingredient._id === id)!;
         return ingredientData.type;
     }
 
-    const [{}, dropTarget] = useDrop({
+    const [_, dropTarget] = useDrop({
         accept: "ingredient",
-        drop(itemId) {
+        drop(itemId: any) {
             getIngredientTypeById(itemId.id) === bun
                 ? dispatch({
                     type: BUN_DROP,

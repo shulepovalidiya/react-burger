@@ -1,15 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, {FC, useEffect, ReactNode} from 'react';
 import modalStyles from "./modal.module.css";
 import {createPortal} from "react-dom";
 import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../modal-overlay/modal-overlay";
-import PropTypes from "prop-types";
 
-function Modal({children, header, onClose}) {
+type TModalProps = {
+    children: ReactNode;
+    header?: string;
+    onClose: () => void;
+}
 
-    const closeByEsc = (e) => e.key === "Escape" && onClose();
+const Modal: FC<TModalProps> = ({children, header, onClose}) => {
 
-    const closeByOverlayClick = (e) => e.target.classList.contains("modal-overlay") && onClose();
+    const closeByEsc = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+
+    const closeByOverlayClick = (e: Event) => (e.target as Element).classList.contains("modal-overlay") && onClose();
 
     useEffect(() => {
         document.addEventListener('keydown', closeByEsc)
@@ -24,7 +29,7 @@ function Modal({children, header, onClose}) {
     const modalRoot = document.getElementById('modals');
 
     return createPortal(
-        <ModalOverlay onClose={onClose}>
+        <ModalOverlay>
             <div className={`${modalStyles.opened}`}>
                 <div className={`${modalStyles.header} mt-10 mr-10 ml-10`}>
                     <h2 className="text text_type_main-large">{header}</h2>
@@ -32,14 +37,8 @@ function Modal({children, header, onClose}) {
                 </div>
                 {children}
             </div>
-        </ModalOverlay>, modalRoot)
+        </ModalOverlay>, modalRoot as Element)
 
-}
-
-Modal.propTypes = {
-    children: PropTypes.element.isRequired,
-    header: PropTypes.string,
-    onClose: PropTypes.func.isRequired,
 }
 
 export default Modal;

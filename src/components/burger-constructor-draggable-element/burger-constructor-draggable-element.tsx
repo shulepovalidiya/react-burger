@@ -1,25 +1,30 @@
-import React, {useRef} from "react";
+import React, {useRef, FC} from "react";
 import {ConstructorElement, DragIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import {CUT_INGREDIENT, DELETE_INGREDIENT, REORDER_INGREDIENTS} from "../../services/actions/burger-ingredients";
 import {useDispatch} from "react-redux";
 import {useDrag, useDrop} from "react-dnd";
-import styles from './burger-constructor-draggable-element.module.css'
+import styles from './burger-constructor-draggable-element.module.css';
+import {TIngredient} from "../app/App";
 
-export default function BurgerConstructorDraggableElement({ingredient, index}) {
+type TBurgerConstructorDraggableElementProps = {
+    ingredient: TIngredient,
+    index: number,
+}
+
+const BurgerConstructorDraggableElement: FC<TBurgerConstructorDraggableElementProps> = ({ingredient, index}) => {
 
     const {name, image, price} = ingredient;
 
-
     const dispatch = useDispatch();
 
-    const handleDelete = (index) => {
+    const handleDelete = (index: number) => {
         dispatch({
             type: DELETE_INGREDIENT,
             index,
         })
     };
 
-    const ref=useRef();
+    const ref: any =useRef();
 
     const [{ handlerId }, drop] = useDrop({
         accept: ["constructorElement"],
@@ -28,7 +33,7 @@ export default function BurgerConstructorDraggableElement({ingredient, index}) {
                 handlerId: monitor.getHandlerId()
             };
         },
-        hover(item, monitor) {
+        hover(item: any, monitor) {
             if (!ref.current) {
                 return;
             }
@@ -49,7 +54,7 @@ export default function BurgerConstructorDraggableElement({ingredient, index}) {
             // Получаем положение курсора
             const clientOffset = monitor.getClientOffset();
             // Получаем положение курсора относительно текущего элемента
-            const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+            const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
 
             // Выходим, если перемещаемый элемент ниже, чем 50% от высоты текущего
             if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
@@ -104,3 +109,5 @@ export default function BurgerConstructorDraggableElement({ingredient, index}) {
         </li>
     )
 }
+
+export default BurgerConstructorDraggableElement;

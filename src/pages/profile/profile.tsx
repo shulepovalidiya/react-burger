@@ -1,24 +1,20 @@
-import React from "react";
-import {NavLink, Route, useNavigate, Routes, Outlet} from "react-router-dom";
+import React, {FC} from "react";
+import {NavLink, useNavigate, Outlet} from "react-router-dom";
 import styles from "./profile.module.css"
 import {useDispatch} from "react-redux";
 import {logout} from "../../services/actions/auth";
-import UserInfo from "../../components/user-info/user-info";
-import ProtectedRouteElement from "../../components/protected-route-element/protected-route-element";
-import Orders from "../orders/orders";
 
-export default function Profile() {
+const Profile: FC = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const setActive = ({isActive}) => isActive
-        ? `text text_type_main-medium text_color_primary ${styles.navLink}`
-        : `text text_type_main-medium text_color_inactive ${styles.navLink}`
+    const setActive = ({isActive} : {isActive: boolean;}) =>
+        `${styles.navLink} text text_type_main-medium ${isActive ? "text_color_primary" : "text_color_inactive"}`
 
-    const handleLogout = (e) => {
+    const handleLogout = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
-        dispatch(logout());
+        dispatch(logout() as any);
         navigate("/");
     }
 
@@ -33,14 +29,14 @@ export default function Profile() {
                         <NavLink to={"/profile/orders"} className={setActive} end>История заказов</NavLink>
                     </li>
                     <li>
-                        <NavLink to={"/login"} className={setActive} onClick={handleLogout}>Выход</NavLink>
+                        <NavLink to={"/login"} className={setActive} onClick={e => handleLogout(e)}>Выход</NavLink>
                     </li>
                 </ul>
                 <span className={`text text_type_main-default text_color_inactive ${styles.caption}`}>В этом разделе вы можете изменить свои персональные данные</span>
             </nav>
-
             <Outlet />
-
         </section>
     )
 }
+
+export default Profile;

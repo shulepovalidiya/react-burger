@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, FC} from 'react';
 import './App.module.css';
 import AppHeader from "../app-header/app-header";
 import Main from "../main/main";
@@ -17,26 +17,50 @@ import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from "../modal/modal";
 import Orders from "../../pages/orders/orders";
 import UserInfo from "../user-info/user-info";
+import {RootState} from "../../index";
 
-function App() {
+export type TIngredientType = "bun" | "main" | "sauce";
+
+export type TIngredient = {
+    readonly _id: string;
+    readonly name: string;
+    readonly type: TIngredientType;
+    readonly proteins: number;
+    readonly fat: number;
+    readonly carbohydrates: number;
+    readonly calories: number;
+    readonly price: number;
+    readonly image: string;
+    readonly image_mobile: string;
+    readonly image_large: string,
+    readonly __v: number;
+    uuid?: string;
+}
+
+export const App: FC = () => {
 
     const dispatch = useDispatch();
     const location = useLocation();
     const navigate = useNavigate();
     const state = location.state;
 
-    const {ingredients, ingredientsRequest} = useSelector(state => state.ingredients)
+    const {
+        ingredients,
+        ingredientsRequest
+    } : {
+        ingredients: TIngredient[],
+        ingredientsRequest: boolean } = useSelector((state: RootState) => state.ingredients)
 
     useEffect(() => {
-        dispatch(getIngredients())
-        dispatch(checkUserAuth())
+        dispatch(getIngredients() as any)
+        dispatch(checkUserAuth() as any)
     }, [])
 
     return (
         <>
             <AppHeader/>
             <Routes location={state?.backgroundLocation || location}>
-                <Route path={"/"}  element={(!ingredientsRequest && ingredients.length) && <Main/>}>
+                <Route path={"/"} element={(!ingredientsRequest && ingredients.length) && <Main/>}>
                 </Route>
                 <Route path={"/login"}
                        element={<ProtectedRouteElement onlyUnAuth={true}><SignIn/></ProtectedRouteElement>}/>
@@ -46,11 +70,12 @@ function App() {
                        element={<ProtectedRouteElement onlyUnAuth={true}><ForgotPassword/></ProtectedRouteElement>}/>
                 <Route path={"/reset-password"}
                        element={<ProtectedRouteElement onlyUnAuth={true}><ResetPassword/></ProtectedRouteElement>}/>
-                <Route path={"/profile"} exact element={<ProtectedRouteElement><Profile/></ProtectedRouteElement>}>
-                    <Route index exact element={<ProtectedRouteElement><UserInfo/></ProtectedRouteElement>} />
-                    <Route path={"/profile/orders"} exact element={<ProtectedRouteElement><Orders/></ProtectedRouteElement>} />
+                <Route path={"/profile"} element={<ProtectedRouteElement onlyUnAuth={false}><Profile/></ProtectedRouteElement>}>
+                    <Route index  element={<ProtectedRouteElement onlyUnAuth={false}><UserInfo/></ProtectedRouteElement>}/>
+                    <Route path={"/profile/orders"}
+                           element={<ProtectedRouteElement onlyUnAuth={false}><Orders/></ProtectedRouteElement>}/>
                 </Route>
-                <Route path={"/ingredients/:id"} element={<IngredientDetails/>}/>
+                <Route path={"/ingredients/:id"} element={<IngredientDetails isModal={false}/>}/>
             </Routes>
             {state?.backgroundLocation && (
                 <Routes>
@@ -66,4 +91,3 @@ function App() {
 }
 
 
-export default App;
