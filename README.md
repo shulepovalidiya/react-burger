@@ -1,7 +1,22 @@
 # Проект Stellar Burgers на React
 
+![image](https://user-images.githubusercontent.com/77075458/230611143-3fae80d0-d456-4cdd-8174-5d68026484d0.png)
+
 Проект выполнен в рамках курса по React-разработке от Яндекс Практикум. 
-Свёрстан по [макету](https://www.figma.com/file/zFGN2O5xktHl9VmoOieq5E/React-_-Проектные-задачи_external_link?node-id=724%3A350&t=H9f2EkBlrkT4ymiP-0).
+Свёрстан по [макету](https://www.figma.com/file/zFGN2O5xktHl9VmoOieq5E/React-_-Проектные-задачи_external_link?node-id=724%3A350&t=H9f2EkBlrkT4ymiP-0). Реализована возможность регистрации, авторизации, восстановления пароля, оформления заказа. Перетаскивание ингредиентов реализовано с помощью библиотеки React DND. 
+
+## Технологии
+
++ React
++ Redux
++ TypeScript
+
+## Планы по доработке
+
++ типизация хранилища
++ добавление в проект последней функциональности — ленты заказов с использованием WebSocket
++ покрытие проекта unit-тестами
++ вёрстка мобильной версии
 
 ## Как запустить проект
 
