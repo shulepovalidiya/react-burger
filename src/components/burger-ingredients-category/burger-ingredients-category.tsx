@@ -1,19 +1,24 @@
-import React from "react";
+import React, {FC} from "react";
 import BurgerIngredientsStyles from "../burger-ingredients/burger-ingredients.module.css";
 import BurgerIngredientsElement from "../burger-ingredients-element/burger-ingredients-element";
-import {oneOf} from "prop-types";
 import { useSelector, } from "react-redux";
 import {useLocation, Link} from "react-router-dom";
 import {ingredientTypes} from "../../utils/constants";
 import styles from "./burger-ingredients-category.module.css"
+import {TIngredientType, TIngredient} from "../app/App";
+import {RootState} from "../../index";
 
-function BurgerIngredientsCategory({ingredientType}) {
+type TBurgerIngredientsCategory = {
+    ingredientType: TIngredientType;
+}
+
+const BurgerIngredientsCategory: FC<TBurgerIngredientsCategory> = ({ingredientType}) => {
 
     const location = useLocation();
 
     const {bun, sauce, main} = ingredientTypes;
 
-    const {ingredients} = useSelector(state => state.ingredients);
+    const {ingredients} : {ingredients: TIngredient[]} = useSelector((state: RootState) => state.ingredients);
 
     function getCategoryName() {
         let categoryName = "";
@@ -47,10 +52,6 @@ function BurgerIngredientsCategory({ingredientType}) {
             </ul>
         </>
     )
-}
-
-BurgerIngredientsCategory.propTypes = {
-    ingredientType: oneOf(["bun", "sauce", "main"]).isRequired,
 }
 
 export default BurgerIngredientsCategory;

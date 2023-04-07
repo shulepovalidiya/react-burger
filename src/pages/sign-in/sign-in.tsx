@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {FC, FormEvent} from "react";
 import FormTemplate from "../../components/form-template/form-template";
 import {EmailInput, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import NavCaption from "../../components/nav-caption/nav-caption";
@@ -7,8 +7,7 @@ import {authorize} from "../../services/actions/auth";
 import {useNavigate} from "react-router-dom";
 import useForm from "../../hooks/use-form";
 
-
-export default function SignIn() {
+const SignIn: FC = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -17,9 +16,9 @@ export default function SignIn() {
 
     const {email, password} = values;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        dispatch(authorize(email, password));
+        dispatch(authorize(email, password) as any);
         navigate('/');
     }
 
@@ -32,6 +31,7 @@ export default function SignIn() {
             <NavCaption text={"Вы — новый пользователь? "} linkText={"Зарегистрироваться"} to={"/register"}/>
             <NavCaption text={"Забыли пароль? "} linkText={"Восстановить пароль"} to={"/forgot-password"}/>
         </section>
-
     )
 }
+
+export default SignIn;

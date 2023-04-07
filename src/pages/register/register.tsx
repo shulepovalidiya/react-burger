@@ -1,4 +1,4 @@
-import React from "react";
+import React, {FC, FormEvent} from "react";
 import FormTemplate from "../../components/form-template/form-template";
 import {EmailInput, PasswordInput, Input} from "@ya.praktikum/react-developer-burger-ui-components";
 import NavCaption from "../../components/nav-caption/nav-caption";
@@ -7,10 +7,9 @@ import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import useForm from "../../hooks/use-form";
 
-export default function Register() {
+const Register: FC = () => {
 
     const navigate = useNavigate();
-
     const dispatch = useDispatch();
 
     const {values, handleChange} = useForm({
@@ -21,9 +20,9 @@ export default function Register() {
 
     const { email, name, password } = values;
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        dispatch(register(email, password, name))
+    const handleSubmit = (e: FormEvent) => {
+        e.preventDefault();
+        dispatch(register(email, password, name) as any)
         navigate('/');
     }
 
@@ -38,3 +37,5 @@ export default function Register() {
         </section>
     )
 }
+
+export default Register;

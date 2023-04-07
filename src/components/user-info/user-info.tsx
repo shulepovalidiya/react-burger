@@ -1,15 +1,19 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, FC, FormEvent} from "react";
 import styles from "../../pages/profile/profile.module.css";
 import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
 import {getUserInfo, updateUserInfo} from "../../services/actions/auth";
 import {useDispatch, useSelector} from "react-redux";
 import useForm from "../../hooks/use-form";
+import {RootState} from "../../index";
 
-export default function UserInfo() {
+const UserInfo: FC = () => {
 
     const dispatch = useDispatch();
 
-    const {currentName, currentLogin} = useSelector(state => state.auth);
+    const {currentName, currentLogin} : {
+        currentName: string;
+        currentLogin: string;
+    } = useSelector((state: RootState) => state.auth);
 
     const {values, handleChange, setValues} = useForm({
         name: currentName,
@@ -20,14 +24,14 @@ export default function UserInfo() {
     const {name, email, password} = values;
 
     useEffect(() => {
-        dispatch(getUserInfo())
+        dispatch(getUserInfo() as any)
         setValues({...values,
             name: currentName,
             email: currentLogin,
         })
     }, [currentName, currentLogin]);
 
-    const [isDisabled, setDisabled] = useState({
+    const [isDisabled, setDisabled] = useState<{[index: string]: boolean}>({
         name: true,
         email: true,
         password: true,
@@ -39,7 +43,7 @@ export default function UserInfo() {
         setIsInputEdited(true)
     }
 
-    const handleIconClick = (inputName) => {
+    const handleIconClick = (inputName: string) => {
         setDisabled({
             ...isDisabled,
             [inputName]: !isDisabled[inputName]
@@ -59,9 +63,9 @@ export default function UserInfo() {
         })
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        dispatch(updateUserInfo(name, email, password));
+        dispatch(updateUserInfo(name, email, password) as any);
         setIsInputEdited(false);
         setDisabled({
             name: true,
@@ -72,7 +76,7 @@ export default function UserInfo() {
 
 
     return (
-        <form onChange={handleInputChange} onReset={handleReset} onSubmit={handleSubmit}>
+        <form onChange={handleInputChange} onReset={handleReset} onSubmit={e => handleSubmit(e)}>
             <fieldset className={styles.fieldset}>
                 <Input value={name} type={"text"} placeholder={"Имя"} name={"name"}
                        icon={isDisabled.name ? "EditIcon" : "CloseIcon"}
@@ -101,3 +105,5 @@ export default function UserInfo() {
         </form>
     )
 }
+
+export default UserInfo;

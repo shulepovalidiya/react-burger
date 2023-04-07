@@ -1,9 +1,12 @@
-import React from "react";
+import React, {FC} from "react";
 import orderDetailsStyles from "./order-details.module.css"
-import PropTypes from "prop-types";
 import SuccessIcon from "../success-icon/success-icon";
 
-function OrderDetails({orderNumber}) {
+type TOrderDetailsProps = {
+    orderNumber: number;
+}
+
+const OrderDetails: FC<TOrderDetailsProps> = ({orderNumber}) => {
 
     return (
         <div className={orderDetailsStyles.container}>
@@ -20,9 +23,5 @@ function OrderDetails({orderNumber}) {
     )
 }
 
-OrderDetails.propTypes = {
-    orderNumber: PropTypes.number,
-
-}
 
 export default OrderDetails;

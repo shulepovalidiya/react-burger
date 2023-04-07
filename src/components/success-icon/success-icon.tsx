@@ -1,9 +1,9 @@
-import React from "react";
+import React, {FC} from "react";
 
-export default function SuccessIcon() {
+const SuccessIcon: FC = () => {
 
     return (
-        <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" link="http://www.w3.org/1999/xlink">
+        <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="120" height="120" fill="url(#pattern0)"/>
             <defs>
                 <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
@@ -14,3 +14,5 @@ export default function SuccessIcon() {
         </svg>
     )
 }
+
+export default SuccessIcon;

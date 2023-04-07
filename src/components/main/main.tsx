@@ -1,4 +1,4 @@
-import React from "react";
+import React, {FC} from "react";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import MainStyles from "./main.module.css";
@@ -7,12 +7,16 @@ import {HTML5Backend} from "react-dnd-html5-backend";
 import {useParams} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {Outlet} from "react-router-dom";
+import {RootState} from "../../index";
+import {TIngredient} from "../app/App";
 
 
-function Main() {
+const Main: FC = () => {
 
     const {id} = useParams();
-    const ingredient = useSelector(state => state.ingredients.ingredients.find(item => item._id === id))
+
+    const {ingredients} : {ingredients: TIngredient[]} = useSelector((state: RootState) => state.ingredients)
+    const ingredient: TIngredient = ingredients.find(item => item._id === id)!
 
     return (
         <main className={MainStyles.main}>

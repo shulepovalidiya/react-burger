@@ -1,19 +1,31 @@
-import React from "react";
+import React, {FC} from "react";
 import ElementStyles from "./burger-ingredients-element.module.css";
-import PropTypes from "prop-types";
-import {Counter} from "@ya.praktikum/react-developer-burger-ui-components";
-import {CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
+import {Counter, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import {INGREDIENT_CLICK} from "../../services/actions/burger-ingredients";
 import {useDispatch, useSelector} from "react-redux";
 import {useDrag} from "react-dnd";
+import {RootState} from "../../index";
+import {TIngredient} from "../app/App";
+import {ingredientTypes} from "../../utils/constants";
 
-function BurgerIngredientsElement({id}) {
+type TBurgerIngredientsElementProps = {
+    id: string;
+}
+
+const BurgerIngredientsElement: FC<TBurgerIngredientsElementProps> = ({id}) => {
 
     const dispatch = useDispatch();
-    const ingredientData = useSelector(state => state.ingredients.ingredients.find(item => item._id === id))
-    const {ingredients, draggedIngredients, currentBun} = useSelector(state => state.ingredients)
+    const {ingredients, draggedIngredients, currentBun} : {
+        ingredients: TIngredient[];
+        draggedIngredients: TIngredient[];
+        currentBun: TIngredient;
+    }
+        = useSelector((state: RootState) => state.ingredients)
+    const ingredientData: TIngredient = ingredients.find(item => item._id === id)!
 
-    const [{}, dragRef, dragPreviewRef] = useDrag({
+    const {bun} = ingredientTypes;
+
+    const [, dragRef, dragPreviewRef] = useDrag({
         type: "ingredient",
         item: {id},
     });
@@ -25,7 +37,7 @@ function BurgerIngredientsElement({id}) {
         })
     };
 
-    const getIngredientCount = (id) => {
+    const getIngredientCount = (id: string) => {
         let count = 0;
         draggedIngredients.forEach(draggedIngredient => {
             if (draggedIngredient._id === id) {
@@ -35,18 +47,17 @@ function BurgerIngredientsElement({id}) {
         return count;
     }
 
-    const getBunsCount = (id) => {
-        const count = currentBun && currentBun._id === id ? 2 : 0
-        return count;
+    const getBunsCount = (id: string) => {
+        return currentBun && currentBun._id === id ? 2 : 0;
     }
 
-    const getIngredientType = (id) => {
-        const ingredientData = ingredients.find(ingredient => ingredient._id === id)
+    const getIngredientType = (id: string) => {
+        const ingredientData: TIngredient = ingredients.find(ingredient => ingredient._id === id)!
         return ingredientData.type;
     }
 
-    const getCounterValue = (id) => {
-        if (getIngredientType(id) === "bun") {
+    const getCounterValue = (id: string) => {
+        if (getIngredientType(id) === bun) {
             return getBunsCount(id)
         } else {
             return getIngredientCount(id)
@@ -54,7 +65,6 @@ function BurgerIngredientsElement({id}) {
     }
 
     return (
-
             <figure
                 className={`${ElementStyles.card}`} onClick={handleIngredientClick}
                 ref={dragRef}
@@ -76,10 +86,5 @@ function BurgerIngredientsElement({id}) {
             </figure>
     )
 }
-
-BurgerIngredientsElement.propTypes = {
-    id: PropTypes.string.isRequired,
-}
-
 
 export default BurgerIngredientsElement;

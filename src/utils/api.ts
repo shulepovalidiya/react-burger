@@ -1,22 +1,24 @@
 import {BASE_URL} from "./constants";
 
 class Api {
-    constructor(options) {
+    base_url: string;
+
+    constructor(options: {url: string;}) {
         this.base_url = options.url;
     }
 
-    _checkResponse(res) {
+    private checkResponse(res: Response) {
         return res.ok
             ? res.json()
             : res.json().then((err) => Promise.reject(err));
     }
 
-    _request(url, options) {
-        return fetch(url, options).then(res => this._checkResponse(res))
+    private request(url: string, options: any) {
+        return fetch(url, options).then(res => this.checkResponse(res))
     }
 
-    _refreshToken() {
-        return fetch(`${this.base_url}/auth/token`, {
+    private refreshToken() {
+        return this.request(`${this.base_url}/auth/token`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json;charset=utf-8",
@@ -24,16 +26,16 @@ class Api {
             body: JSON.stringify({
                 token: localStorage.getItem("refreshToken"),
             }),
-        }).then(res => this._checkResponse(res))
+        })
     }
 
-    _fetchWithRefresh = async (url, options) => {
+    private fetchWithRefresh = async (url: string, options: any) => {
         try {
             const res = await fetch(url, options);
-            return await this._checkResponse(res);
-        } catch (err) {
+            return await this.checkResponse(res);
+        } catch (err: any) {
             if (err.message === "jwt expired") {
-                const refreshData = await this._refreshToken();
+                const refreshData = await this.refreshToken();
                 if (!refreshData.success) {
                     return Promise.reject(refreshData);
                 }
@@ -41,7 +43,7 @@ class Api {
                 localStorage.setItem("accessToken", refreshData.accessToken.split('Bearer ')[1]);
                 options.headers.Authorization = `Bearer ${localStorage.getItem("accessToken")}`;
                 const res = await fetch(url, options);
-                return await this._checkResponse(res);
+                return await this.checkResponse(res);
             } else {
                 return Promise.reject(err);
             }
@@ -49,11 +51,11 @@ class Api {
     }
 
     getIngredientsArray() {
-        return this._request(`${this.base_url}/ingredients`, {})
+        return this.request(`${this.base_url}/ingredients`, {})
     }
 
-    getOrderNumber(ingredientsID) {
-        return this._fetchWithRefresh(`${this.base_url}/orders`, {
+    getOrderNumber(ingredientsID: string) {
+        return this.fetchWithRefresh(`${this.base_url}/orders`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -65,8 +67,8 @@ class Api {
         })
     }
 
-    sendPasswordRecoveryCode(email) {
-        return this._request(`${this.base_url}/password-reset`, {
+    sendPasswordRecoveryCode(email: string) {
+        return this.request(`${this.base_url}/password-reset`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -77,8 +79,8 @@ class Api {
         })
     }
 
-    resetPassword(password, token) {
-        return this._request(`${this.base_url}/password-reset/reset`, {
+    resetPassword(password: string, token: string) {
+        return this.request(`${this.base_url}/password-reset/reset`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -90,8 +92,8 @@ class Api {
         })
     }
 
-    createUser(email, password, name) {
-        return this._request(`${this.base_url}/auth/register`, {
+    createUser(email: string, password: string, name: string) {
+        return this.request(`${this.base_url}/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -104,8 +106,8 @@ class Api {
         })
     }
 
-    authorize(email, password) {
-        return this._request(`${this.base_url}/auth/login`, {
+    authorize(email: string, password: string) {
+        return this.request(`${this.base_url}/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -118,7 +120,7 @@ class Api {
     }
 
     logout() {
-        return this._request(`${this.base_url}/auth/logout`, {
+        return this.request(`${this.base_url}/auth/logout`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -131,7 +133,7 @@ class Api {
 
 
     getUserInfo() {
-        return this._fetchWithRefresh(`${this.base_url}/auth/user`, {
+        return this.fetchWithRefresh(`${this.base_url}/auth/user`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -139,8 +141,8 @@ class Api {
         })
     }
 
-    updateUserInfo(name, email, password) {
-        return this._fetchWithRefresh(`${this.base_url}/auth/user`, {
+    updateUserInfo(name: string, email: string, password: string) {
+        return this.fetchWithRefresh(`${this.base_url}/auth/user`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',

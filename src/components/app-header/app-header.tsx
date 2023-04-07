@@ -1,10 +1,10 @@
-import React from "react";
+import React, {FC} from "react";
 import {BurgerIcon, ListIcon, Logo, ProfileIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './app-header.module.css';
 import {NavLink, Link} from "react-router-dom";
 import AppHeaderLink from "../app-header-link/app-header-link";
 
-function AppHeader() {
+const AppHeader: FC = () => {
 
     return (
         <header className={`${styles.header} p4`}>
