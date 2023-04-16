@@ -5,10 +5,11 @@ import {App} from './components/app/App';
 import reportWebVitals from './reportWebVitals';
 import {Provider} from "react-redux";
 import {createStore, applyMiddleware } from "redux";
-import {rootReducer} from "./services/reducers/root-reducer";
+import {rootReducer} from "./services/reducers/root-reducer.js";
 import { compose } from 'redux';
 import thunk from "redux-thunk";
 import {BrowserRouter} from "react-router-dom";
+import {socketMiddleware} from "./services/middleware/socket-middleware";
 
 
 declare global {
@@ -21,7 +22,9 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const enhancer = composeEnhancers();
 
-const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
+
+
+export const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk, socketMiddleware())));
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

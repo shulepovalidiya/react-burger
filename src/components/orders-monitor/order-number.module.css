@@ -1,0 +1,19 @@
+.numbersList {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
+    max-height: 153px;
+    max-width: 272px;
+    gap: 8px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 272px;
+    max-height: 206px;
+}

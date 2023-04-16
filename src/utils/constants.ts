@@ -7,3 +7,5 @@ export const ingredientTypes: {bun: TIngredientType; sauce: TIngredientType, mai
     sauce: "sauce",
     main: "main",
 }
+
+

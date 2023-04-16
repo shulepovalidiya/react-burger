@@ -18,6 +18,9 @@ import Modal from "../modal/modal";
 import Orders from "../../pages/orders/orders";
 import UserInfo from "../user-info/user-info";
 import {RootState} from "../../index";
+import {Feed} from "../../pages/feed/feed";
+import OrderInfo from "../order-info/order-info";
+import {WS_CONNECTION_CLOSED, WS_CONNECTION_START} from "../../services/actions/ws-action-types";
 
 export type TIngredientType = "bun" | "main" | "sauce";
 
@@ -49,11 +52,13 @@ export const App: FC = () => {
         ingredientsRequest
     } : {
         ingredients: TIngredient[],
-        ingredientsRequest: boolean } = useSelector((state: RootState) => state.ingredients)
+        ingredientsRequest: boolean
+    } = useSelector((state: RootState) => state.ingredients)
 
     useEffect(() => {
         dispatch(getIngredients() as any)
         dispatch(checkUserAuth() as any)
+
     }, [])
 
     return (
@@ -70,21 +75,34 @@ export const App: FC = () => {
                        element={<ProtectedRouteElement onlyUnAuth={true}><ForgotPassword/></ProtectedRouteElement>}/>
                 <Route path={"/reset-password"}
                        element={<ProtectedRouteElement onlyUnAuth={true}><ResetPassword/></ProtectedRouteElement>}/>
-                <Route path={"/profile"} element={<ProtectedRouteElement onlyUnAuth={false}><Profile/></ProtectedRouteElement>}>
-                    <Route index  element={<ProtectedRouteElement onlyUnAuth={false}><UserInfo/></ProtectedRouteElement>}/>
+                <Route path={"/profile"}
+                       element={<ProtectedRouteElement onlyUnAuth={false}><Profile/></ProtectedRouteElement>}>
+                    <Route index
+                           element={<ProtectedRouteElement onlyUnAuth={false}><UserInfo/></ProtectedRouteElement>}/>
                     <Route path={"/profile/orders"}
                            element={<ProtectedRouteElement onlyUnAuth={false}><Orders/></ProtectedRouteElement>}/>
                 </Route>
                 <Route path={"/ingredients/:id"} element={<IngredientDetails isModal={false}/>}/>
+                <Route path={"/feed"} element={<Feed/>}/>
+                <Route path={"/feed/:id"} element={<OrderInfo/>}/>
+                <Route path={"/profile/orders/:id"} element={<OrderInfo isOwn={true}/>} />
             </Routes>
+
             {state?.backgroundLocation && (
-                <Routes>
-                    <Route path={"/ingredients/:id"} element={
-                        <Modal onClose={() => navigate(-1)} header={"Детали ингредиента"}>
-                            <IngredientDetails isModal={true}/>
-                        </Modal>}
-                    />
-                </Routes>
+                    <Routes>
+                        <Route path={"/ingredients/:id"} element={
+                            <Modal onClose={() => navigate(-1)} header={"Детали ингредиента"}>
+                                <IngredientDetails isModal={true}/>
+                            </Modal>}/>
+                        <Route path={"/feed/:id"} element={
+                            <Modal onClose={() => navigate(-1)} isOrder={true}>
+                                <OrderInfo isModal={true}/>
+                            </Modal>} />
+                        <Route path={"/profile/orders/:id"} element={
+                            <Modal onClose={() => navigate(-1)} isOrder={true}>
+                                <OrderInfo isModal={true} isOwn={true}/>
+                            </Modal>} />
+                    </Routes>
             )}
         </>
     );
