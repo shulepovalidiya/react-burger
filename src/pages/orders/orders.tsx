@@ -6,6 +6,7 @@ import {TOrder} from "../../services/reducers/ws-reducer";
 import styles from "./orders.module.css"
 import {Link, useLocation} from "react-router-dom";
 import {WS_CONNECTION_CLOSED, WS_CONNECTION_START} from "../../services/actions/ws-action-types";
+import { v4 as uuidv4 } from 'uuid';
 
 const Orders: FC = () => {
 
@@ -27,9 +28,9 @@ const Orders: FC = () => {
     return (
         <ul className={styles.container}>
             {ownOrders && ownOrders.map(order =>
-                <li>
+                <li key={uuidv4()}>
                     <Link to={`/profile/orders/${order._id}`} className={styles.link} state={{backgroundLocation: location}}>
-                        <OrderCard order={order} />
+                        <OrderCard order={order} isHistory={true}/>
                     </Link>
                 </li>
                 )}

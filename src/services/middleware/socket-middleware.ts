@@ -42,7 +42,13 @@ export const socketMiddleware = (): Middleware => {
             if (type === WS_CONNECTION_START) {
                 socket = new WebSocket(action.wsURL);
             }
+
             if (socket) {
+
+                if (type === WS_CONNECTION_CLOSED) {
+                    socket!.close();
+                }
+
                 socket.onopen = event => {
                     dispatch({type: WS_CONNECTION_SUCCESS, payload: event});
                 };

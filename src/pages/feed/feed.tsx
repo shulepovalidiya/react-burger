@@ -8,6 +8,8 @@ import {RootState} from "../../index";
 import {TOrder} from "../../services/reducers/ws-reducer";
 import {Link, useLocation} from "react-router-dom";
 import {WS_CONNECTION_CLOSED, WS_CONNECTION_START} from "../../services/actions/ws-action-types";
+import { v4 as uuidv4 } from 'uuid';
+
 
 export const Feed: FC = () => {
 
@@ -18,7 +20,7 @@ export const Feed: FC = () => {
         orders,
         total,
         totalToday
-    } : {
+    }: {
         orders: TOrder[],
         total: number,
         totalToday: number,
@@ -48,11 +50,13 @@ export const Feed: FC = () => {
             <ul className={styles.ordersList}>
                 {orders && orders.map((order) => {
                     if (order) {
-                        return <Link to={`/feed/${order._id}`} className={styles.link} state={{backgroundLocation: location}}>
-                            <li style={{listStyleType: "none", width: "100%",}}>
+                        return <li style={{listStyleType: "none", width: "100%",}} key={uuidv4()}>
+                            <Link to={`/feed/${order._id}`} className={styles.link}
+                                  state={{backgroundLocation: location}}>
                                 <OrderCard order={order}/>
-                            </li>
-                        </Link>
+                            </Link>
+                        </li>
+
                     }
                 })}
             </ul>

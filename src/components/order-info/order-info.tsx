@@ -8,6 +8,7 @@ import {CurrencyIcon, FormattedDate} from "@ya.praktikum/react-developer-burger-
 import {TOrder} from "../../services/reducers/ws-reducer";
 import {useParams} from "react-router-dom";
 import {WS_CONNECTION_CLOSED, WS_CONNECTION_START} from "../../services/actions/ws-action-types";
+import {TOrderStatus} from "../order-card/order-card";
 
 type TOrderProps = {
     isModal?: boolean;
@@ -55,20 +56,36 @@ const OrderInfo: FC<TOrderProps> = ({isModal, isOwn}) => {
         return pricesArr.reduce((sum, current) => sum + current)
     }
 
+    const translateStatus = (status: TOrderStatus) => {
+        switch (status) {
+            case "done":
+                return "Выполнен"
+            case "created":
+                return "Создан"
+            case "pending":
+                return "Готовится"
+        }
+    }
+
+    const isDone = (status: TOrderStatus) => status === "done"
+
+
     return (
         order &&
         <section className={`${styles.container}`}>
-            {!isModal && <span className={"text text_type_digits-default"}>#0{order.number}</span>}
+            {!isModal && <span className={"text text_type_digits-default mt-30"}>#0{order.number}</span>}
             <h1 className={`text text_type_main-medium mt-10 mb-3 ${styles.header}`}>{order.name}</h1>
             <span
-                className={`text text_type_main-default text_color_success mb-15 ${styles.header}`}>{order.status}</span>
+                className={`text text_type_main-default mb-15 ${styles.header} ${isDone(order.status) && "text_color_success"}`}>{translateStatus(order.status)}</span>
             <h2 className={`text text_type_main-medium mb-6 ${styles.header}`}>Состав:</h2>
             <ul className={styles.ingredientsList}>
                 {Array.from(new Set(order.ingredients)).map((ingredient, index) => {
                     return <li key={index} className={styles.ingredientsListElement}>
-                        <IngredientIcon src={getIngredientDataByID(ingredient)!.image_mobile}
-                                        ingredientName={getIngredientDataByID(ingredient)!.name}/>
-                        <p className={`text text_type_main-default ${styles.ingredientName}`}>{getIngredientDataByID(ingredient)!.name}</p>
+                        <div style={{display: "flex", alignItems: "center", gap: "16px"}}>
+                            <IngredientIcon src={getIngredientDataByID(ingredient)!.image_mobile}
+                                            ingredientName={getIngredientDataByID(ingredient)!.name}/>
+                            <p className={`text text_type_main-default ${styles.ingredientName}`}>{getIngredientDataByID(ingredient)!.name}</p>
+                        </div>
                         <div className={styles.priceContainer}>
                             <span
                                 className={"text text_type_digits-default"}>{getIngredientsCount(ingredient)} x {getIngredientDataByID(ingredient)!.price}</span>

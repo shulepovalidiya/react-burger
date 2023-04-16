@@ -1,6 +1,6 @@
-import React, {FC, useMemo} from "react";
+import React, {FC} from "react";
 import {TIngredient} from "../app/App";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {RootState} from "../../index";
 import styles from "./order-card.module.css"
 import IngredientIcon from "../ingredient-icon/ingredient-icon";
@@ -9,10 +9,13 @@ import {TOrder} from "../../services/reducers/ws-reducer";
 import {FormattedDate} from "@ya.praktikum/react-developer-burger-ui-components";
 
 type TOrderCard = {
-    order: TOrder
+    order: TOrder;
+    isHistory?: boolean;
 }
 
-const OrderCard: FC<TOrderCard> = ({order}) => {
+export type TOrderStatus = "done" | "pending" | "created"
+
+const OrderCard: FC<TOrderCard> = ({order, isHistory}) => {
 
     const {ingredients}: { ingredients: TIngredient[] } = useSelector((state: RootState) => state.ingredients)
 
@@ -26,6 +29,19 @@ const OrderCard: FC<TOrderCard> = ({order}) => {
         return pricesArr.reduce((sum, current) => sum + current)
     }
 
+    const translateStatus = (status: TOrderStatus) => {
+        switch (status) {
+            case "done":
+                return "Выполнен"
+            case "created":
+                return "Создан"
+            case "pending":
+                return "Готовится"
+        }
+    }
+
+    const isDone = (status: TOrderStatus) => status === "done"
+
     return (
         <section className={styles.card}>
             <div className={`${styles.header}`}>
@@ -33,6 +49,12 @@ const OrderCard: FC<TOrderCard> = ({order}) => {
                 <span className={"text text_type_main-default text_color_inactive"}>{formatDate(order.createdAt)}</span>
             </div>
             <h2 className={`text text_type_main-medium mt-6 ${styles.name}`}>{order.name}</h2>
+            {isHistory &&
+                <span className={`text text text_type_main-default mt-2 ${isDone(order.status) && "text_color_success"}`}
+                      style={{width: "100%"}}>
+                    {translateStatus(order.status)}
+                </span>
+            }
             <div className={styles.container}>
                 <ul className={`${styles.ul} mt-6`}>
                     {order && Array.from(new Set(order.ingredients)).map((ingredientID, index, array) => {

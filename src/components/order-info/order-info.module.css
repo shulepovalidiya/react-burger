@@ -36,9 +36,10 @@
 }
 
 .ingredientsListElement {
-    display: grid;
-    grid-template-columns: 64px 320px minmax(min-content, max-content);
+    display: flex;
+    /*grid-template-columns: 64px 320px minmax(min-content, max-content);*/
     align-items: center;
+    justify-content: space-between;
     width: 100%;
 }
 
@@ -50,7 +51,7 @@
     display: flex;
     gap: 9px;
     justify-self: end;
-
+    padding-right: 24px;
 }
 
 .footer {

@@ -13,17 +13,20 @@ type TModalProps = {
     header?: string;
     onClose: () => void;
     isOrder?: boolean;
+    isOwn?: boolean;
 }
 
-const Modal: FC<TModalProps> = ({children, header, onClose, isOrder}) => {
+const Modal: FC<TModalProps> = ({children, header, onClose, isOrder, isOwn}) => {
 
     const closeByEsc = (e: KeyboardEvent) => e.key === "Escape" && onClose();
 
     const {id} = useParams()!;
 
-    const {orders} : {orders: TOrder[]} = useSelector((state: RootState) => state.orders)
+    const {orders, ownOrders}: { orders: TOrder[], ownOrders: TOrder[] } = useSelector((state: RootState) => state.orders)
 
-    // const getOrderNumberById = (id: string) => orders && orders.find(order => order._id === id)!.number
+    const order = isOwn
+        ? ownOrders && ownOrders.find(order => order._id === id)
+        : orders && orders.find(order => order._id === id)
 
     const closeByOverlayClick = (e: Event) => (e.target as Element).classList.contains("modal-overlay") && onClose();
 
@@ -43,8 +46,8 @@ const Modal: FC<TModalProps> = ({children, header, onClose, isOrder}) => {
         <ModalOverlay>
             <div className={`${modalStyles.opened}`}>
                 <div className={`${modalStyles.header} mt-10 mr-10 ml-10`}>
-                    {isOrder && id
-                        ? <h2 className="text text_type_digits-default">#0</h2>
+                    {isOrder && order
+                        ? <h2 className="text text_type_digits-default">#0{order!.number}</h2>
                         : <h2 className="text text_type_main-large">{header}</h2>
                     }
                     <CloseIcon onClick={onClose} type={"primary"}/>
