@@ -19,13 +19,13 @@ const OrderCard: FC<TOrderCard> = ({order, isHistory}) => {
 
     const {ingredients}: { ingredients: TIngredient[] } = useSelector((state: RootState) => state.ingredients)
 
-    const getIngredientDataByID = (ingredientID: string) => ingredients.find(ingredient => ingredient._id === ingredientID)
+    const getIngredientDataByID = (ingredientID: string) => ingredients && ingredients.find(ingredient => ingredient._id === ingredientID)
 
     const formatDate = (dateFromServer: string) => <FormattedDate date={new Date(dateFromServer)}/>
 
     const getTotalPrice = (ingredientsID: string[]) => {
         const pricesArr: number[] = [];
-        ingredientsID.map(id => pricesArr.push(getIngredientDataByID(id)!.price))
+        ingredientsID.map(id => getIngredientDataByID(id) && pricesArr.push(getIngredientDataByID(id)!.price))
         return pricesArr.reduce((sum, current) => sum + current)
     }
 
@@ -43,7 +43,7 @@ const OrderCard: FC<TOrderCard> = ({order, isHistory}) => {
     const isDone = (status: TOrderStatus) => status === "done"
 
     return (
-        <section className={styles.card}>
+        order && <section className={styles.card}>
             <div className={`${styles.header}`}>
                 <span className={"text text_type_digits-default"}>#0{order.number}</span>
                 <span className={"text text_type_main-default text_color_inactive"}>{formatDate(order.createdAt)}</span>
@@ -58,7 +58,7 @@ const OrderCard: FC<TOrderCard> = ({order, isHistory}) => {
             <div className={styles.container}>
                 <ul className={`${styles.ul} mt-6`}>
                     {order && Array.from(new Set(order.ingredients)).map((ingredientID, index, array) => {
-                        if (index < 6 && ingredientID) {
+                        if (index < 6 && getIngredientDataByID(ingredientID)) {
                             return (<li key={index} className={styles.li}>
                                 <IngredientIcon
                                     src={getIngredientDataByID(ingredientID)!.image_mobile}

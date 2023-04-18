@@ -20,7 +20,6 @@ import UserInfo from "../user-info/user-info";
 import {RootState} from "../../index";
 import {Feed} from "../../pages/feed/feed";
 import OrderInfo from "../order-info/order-info";
-import {WS_CONNECTION_CLOSED, WS_CONNECTION_START} from "../../services/actions/ws-action-types";
 
 export type TIngredientType = "bun" | "main" | "sauce";
 
@@ -50,7 +49,7 @@ export const App: FC = () => {
     const {
         ingredients,
         ingredientsRequest
-    } : {
+    }: {
         ingredients: TIngredient[],
         ingredientsRequest: boolean
     } = useSelector((state: RootState) => state.ingredients)
@@ -85,24 +84,25 @@ export const App: FC = () => {
                 <Route path={"/ingredients/:id"} element={<IngredientDetails isModal={false}/>}/>
                 <Route path={"/feed"} element={<Feed/>}/>
                 <Route path={"/feed/:id"} element={<OrderInfo/>}/>
-                <Route path={"/profile/orders/:id"} element={<OrderInfo isOwn={true}/>} />
+                <Route path={"/profile/orders/:id"} element={<ProtectedRouteElement onlyUnAuth={false}><OrderInfo
+                    isOwn={true}/></ProtectedRouteElement>}/>
             </Routes>
 
             {state?.backgroundLocation && (
-                    <Routes>
-                        <Route path={"/ingredients/:id"} element={
-                            <Modal onClose={() => navigate(-1)} header={"Детали ингредиента"}>
-                                <IngredientDetails isModal={true}/>
-                            </Modal>}/>
-                        <Route path={"/feed/:id"} element={
-                            <Modal onClose={() => navigate(-1)} isOrder={true}>
-                                <OrderInfo isModal={true}/>
-                            </Modal>} />
-                        <Route path={"/profile/orders/:id"} element={
-                            <Modal onClose={() => navigate(-1)} isOrder={true}>
-                                <OrderInfo isModal={true} isOwn={true}/>
-                            </Modal>} />
-                    </Routes>
+                <Routes>
+                    <Route path={"/ingredients/:id"} element={
+                        <Modal onClose={() => navigate(-1)} header={"Детали ингредиента"}>
+                            <IngredientDetails isModal={true}/>
+                        </Modal>}/>
+                    <Route path={"/feed/:id"} element={
+                        <Modal onClose={() => navigate(-1)} isOrder={true}>
+                            <OrderInfo isModal={true}/>
+                        </Modal>}/>
+                    <Route path={"/profile/orders/:id"} element={
+                        <Modal onClose={() => navigate(-1)} isOrder={true}>
+                            <OrderInfo isModal={true} isOwn={true}/>
+                        </Modal>}/>
+                </Routes>
             )}
         </>
     );

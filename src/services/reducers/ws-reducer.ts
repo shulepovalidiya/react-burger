@@ -4,7 +4,6 @@ import {
     WS_CONNECTION_ERROR,
     WS_CONNECTION_SUCCESS,
     WS_GET_ORDERS,
-    WS_GET_OWN_ORDERS
 } from "../actions/ws-action-types";
 
 export type TOrder = {
@@ -24,13 +23,11 @@ type TWSState = {
     success: boolean;
     total: number;
     totalToday: number;
-    ownOrders: TOrder[],
 }
 
 const initialState: TWSState = {
     wsConnected: false,
     orders: [],
-    ownOrders: [],
     success: false,
     total: 0,
     totalToday: 0,
@@ -57,26 +54,18 @@ export const wsReducer = (state = initialState, action: TWSActions) => {
             return {
                 ...state,
                 error: undefined,
-                wsConnected: false
+                wsConnected: false,
             };
 
         case WS_GET_ORDERS:
             return {
                 ...state,
                 error: undefined,
-                success: action.success,
-                orders: action.payload,
-                total: action.total,
-                totalToday: action.totalToday,
+                success: action.payload.success,
+                orders: action.payload.orders,
+                total: action.payload.total,
+                totalToday: action.payload.totalToday,
             };
-
-        case WS_GET_OWN_ORDERS:
-            return {
-                ...state,
-                error: undefined,
-                success: action.success,
-                ownOrders: action.orders,
-            }
 
         default:
             return state;

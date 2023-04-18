@@ -17,14 +17,6 @@ type TOrderProps = {
 
 const OrderInfo: FC<TOrderProps> = ({isModal, isOwn}) => {
 
-    const {
-        orders,
-        ownOrders
-    }: {
-        orders: TOrder[],
-        ownOrders: TOrder[]
-    } = useSelector((state: RootState) => state.orders)
-
     const {ingredients}: { ingredients: TIngredient[] } = useSelector((state: RootState) => state.ingredients)
     const {id} = useParams();
     const dispatch = useDispatch();
@@ -33,20 +25,20 @@ const OrderInfo: FC<TOrderProps> = ({isModal, isOwn}) => {
         !isOwn
             ? dispatch({
                 type: WS_CONNECTION_START,
-                wsURL: `wss://norma.nomoreparties.space/orders/all`
+                payload: `/all`
             })
             : dispatch({
                 type: WS_CONNECTION_START,
-                wsURL: `wss://norma.nomoreparties.space/orders?token=${localStorage.getItem("accessToken")}`})
+                payload: `?token=${localStorage.getItem("accessToken")}`})
 
         return () => {dispatch({type: WS_CONNECTION_CLOSED})}
-    }, [])
+    }, [dispatch])
+
+    const {orders}: { orders: TOrder[]} = useSelector((state: RootState) => state.orders)
 
     const getIngredientDataByID = (ingredientID: string) => ingredients.find(ingredient => ingredient._id === ingredientID)
 
-    const order: TOrder = isOwn
-        ? ownOrders && ownOrders.find(order => order._id === id)!
-        : orders && orders.find(order => order._id === id)!
+    const order: TOrder = orders && orders.find(order => order._id === id)!
 
     const getIngredientsCount = (id: string) => order.ingredients.filter((ingredient: string) => ingredient === id).length
 

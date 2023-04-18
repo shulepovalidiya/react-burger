@@ -1,13 +1,8 @@
-import type {Middleware, MiddlewareAPI} from 'redux';
+import type {AnyAction, Middleware, MiddlewareAPI} from 'redux';
 import {
-    TWSActions,
-    WS_CONNECTION_CLOSED,
-    WS_CONNECTION_ERROR,
-    WS_CONNECTION_START,
-    WS_CONNECTION_SUCCESS,
-    WS_GET_ORDERS,
-    WS_GET_OWN_ORDERS
+    TWSActions, TWSStoreActions
 } from "../actions/ws-action-types";
+
 import type {ThunkDispatch} from 'redux-thunk';
 import {TOrder} from "../reducers/ws-reducer";
 
@@ -31,52 +26,49 @@ export type AppActions =
     | TWSActions
 
 
-export const socketMiddleware = (): Middleware => {
+export const socketMiddleware = (wsURL: string, wsActions: TWSStoreActions): Middleware => {
     return ((store: MiddlewareAPI<AppDispatch, RootState>) => {
         let socket: WebSocket | null = null;
 
-        return next => (action: TWSActions) => {
+        return next => (action: AnyAction) => {
             const {dispatch} = store;
-            const {type} = action;
+            const {type, payload} = action;
+            const {wsInit, onError, onOpen, onClose, onMessage} = wsActions;
 
-            if (type === WS_CONNECTION_START) {
-                socket = new WebSocket(action.wsURL);
+            if (type === wsInit) {
+                socket = new WebSocket(`${wsURL}${payload}`);
+            }
+
+            if (type === onClose) {
+                socket!.close();
             }
 
             if (socket) {
 
-                if (type === WS_CONNECTION_CLOSED) {
+                if (type === onClose) {
                     socket!.close();
                 }
 
                 socket.onopen = event => {
-                    dispatch({type: WS_CONNECTION_SUCCESS, payload: event});
+                    dispatch({type: onOpen, payload: event});
                 };
 
                 socket.onerror = event => {
-                    dispatch({type: WS_CONNECTION_ERROR, payload: event});
+                    dispatch({type: onError, payload: event});
                 };
 
                 socket.onmessage = event => {
                     const {data} = event;
                     const parsedData: TMessageResponse = JSON.parse(data);
-                    socket!.url === 'wss://norma.nomoreparties.space/orders/all'
-                        ? dispatch({
-                            type: WS_GET_ORDERS,
-                            payload: parsedData.orders,
-                            success: parsedData.success,
-                            total: parsedData.total,
-                            totalToday: parsedData.totalToday
-                        })
-                        : dispatch({
-                            type: WS_GET_OWN_ORDERS,
-                            orders: parsedData.orders,
-                            success: parsedData.success,
+                    console.log(socket!.url)
+                    dispatch({
+                            type: onMessage,
+                            payload: parsedData,
                         })
                 };
 
                 socket.onclose = event => {
-                    dispatch({type: WS_CONNECTION_CLOSED, payload: event});
+                    dispatch({type: onClose, payload: event});
                 }
             }
 

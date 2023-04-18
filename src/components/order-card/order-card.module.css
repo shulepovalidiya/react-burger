@@ -34,9 +34,9 @@
     margin: 0;
 }
 
-.li:last-of-type img {
-    opacity: 60%;
-}
+/*.li:last-of-type img {*/
+/*    opacity: 60%;*/
+/*}*/
 
 .li:first-of-type > div {
     margin-left: -16px;
@@ -50,9 +50,13 @@
     width: 64px;
     height: 64px;
     border-radius: 100px;
+    border: 2px solid transparent;
+    box-sizing: border-box;
     margin-left: -16px;
     top: 0;
+    background: linear-gradient(rgba(28, 28, 33, .6), rgba(28, 28, 33, .6)) content-box;
 }
+
 
 .container {
     display: flex;

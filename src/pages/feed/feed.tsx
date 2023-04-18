@@ -29,12 +29,12 @@ export const Feed: FC = () => {
     useEffect(() => {
         dispatch({
             type: WS_CONNECTION_START,
-            wsURL: `wss://norma.nomoreparties.space/orders/all`
+            payload: `/all`
         })
         return () => {
             dispatch({type: WS_CONNECTION_CLOSED})
         }
-    }, [])
+    }, [dispatch])
 
     const getOrderNumbersByStatus = (status: "done" | "pending" | "created", ordersCount: number) => {
         const result: number[] = [];

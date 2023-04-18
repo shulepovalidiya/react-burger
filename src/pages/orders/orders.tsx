@@ -12,22 +12,24 @@ const Orders: FC = () => {
 
     const dispatch = useDispatch();
     const location = useLocation();
-    const {ownOrders} : {ownOrders: TOrder[]} = useSelector((state: RootState) => state.orders)
 
     useEffect(() => {
 
         dispatch({
             type: WS_CONNECTION_START,
-            wsURL: `wss://norma.nomoreparties.space/orders?token=${localStorage.getItem("accessToken")}`})
+            payload: `?token=${localStorage.getItem("accessToken")}`
+        })
 
         return () => {
             dispatch({type: WS_CONNECTION_CLOSED})
         }
-    }, [])
+    }, [dispatch])
+
+    const {orders} : {orders: TOrder[]} = useSelector((state: RootState) => state.orders)
 
     return (
         <ul className={styles.container}>
-            {ownOrders && ownOrders.map(order =>
+            {orders && orders.map(order =>
                 <li key={uuidv4()}>
                     <Link to={`/profile/orders/${order._id}`} className={styles.link} state={{backgroundLocation: location}}>
                         <OrderCard order={order} isHistory={true}/>

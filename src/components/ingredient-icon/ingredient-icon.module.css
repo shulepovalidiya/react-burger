@@ -5,10 +5,8 @@
     border-radius: 100px;
     border: 2px solid transparent;
     box-sizing: border-box;
-    /*border-image: ;*/
     margin-left: -16px;
     background: linear-gradient(#1C1C21, #1C1C21) content-box, linear-gradient(to right, #801AB2, #4C4CFF) border-box;
-    /*background: #1C1C21;*/
 }
 
 .img {

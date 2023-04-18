@@ -4,13 +4,19 @@ import './index.css';
 import {App} from './components/app/App';
 import reportWebVitals from './reportWebVitals';
 import {Provider} from "react-redux";
-import {createStore, applyMiddleware } from "redux";
-import {rootReducer} from "./services/reducers/root-reducer.js";
-import { compose } from 'redux';
+import {applyMiddleware, compose, createStore} from "redux";
+import {rootReducer} from "./services/reducers/root-reducer";
 import thunk from "redux-thunk";
 import {BrowserRouter} from "react-router-dom";
 import {socketMiddleware} from "./services/middleware/socket-middleware";
-
+import {
+    TWSStoreActions,
+    WS_CONNECTION_CLOSED,
+    WS_CONNECTION_ERROR,
+    WS_CONNECTION_START,
+    WS_CONNECTION_SUCCESS,
+    WS_GET_ORDERS
+} from "./services/actions/ws-action-types";
 
 declare global {
     interface Window {
@@ -22,9 +28,17 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const enhancer = composeEnhancers();
 
+const wsActions: TWSStoreActions = {
+    wsInit: WS_CONNECTION_START,
+    onOpen: WS_CONNECTION_SUCCESS,
+    onClose: WS_CONNECTION_CLOSED,
+    onError: WS_CONNECTION_ERROR,
+    onMessage: WS_GET_ORDERS,
+};
 
+const wsBaseUrl = "wss://norma.nomoreparties.space/orders";
 
-export const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk, socketMiddleware())));
+export const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk, socketMiddleware(wsBaseUrl, wsActions))));
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
