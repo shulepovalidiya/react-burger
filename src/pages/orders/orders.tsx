@@ -1,16 +1,14 @@
 import React, {FC, useEffect} from "react";
 import OrderCard from "../../components/order-card/order-card";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../index";
-import {TOrder} from "../../services/reducers/ws-reducer";
 import styles from "./orders.module.css"
 import {Link, useLocation} from "react-router-dom";
 import {WS_CONNECTION_CLOSED, WS_CONNECTION_START} from "../../services/actions/ws-action-types";
-import { v4 as uuidv4 } from 'uuid';
+import {useAppDispatch, useAppSelector} from "../../services/hooks";
+import {TOrder} from "../../services/types/orders";
 
 const Orders: FC = () => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const location = useLocation();
 
     useEffect(() => {
@@ -25,12 +23,12 @@ const Orders: FC = () => {
         }
     }, [dispatch])
 
-    const {orders} : {orders: TOrder[]} = useSelector((state: RootState) => state.orders)
+    const {orders} : {orders: TOrder[]} = useAppSelector(state => state.orders)
 
     return (
         <ul className={styles.container}>
             {orders && orders.map(order =>
-                <li key={uuidv4()}>
+                order && <li key={order._id}>
                     <Link to={`/profile/orders/${order._id}`} className={styles.link} state={{backgroundLocation: location}}>
                         <OrderCard order={order} isHistory={true}/>
                     </Link>

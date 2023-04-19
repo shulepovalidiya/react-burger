@@ -2,19 +2,18 @@ import React, {FC, FormEvent} from "react";
 import FormTemplate from "../../components/form-template/form-template";
 import {Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import NavCaption from "../../components/nav-caption/nav-caption";
-import {useDispatch, useSelector} from "react-redux";
-import {resetPassword} from "../../services/actions/auth";
 import {useNavigate, Navigate} from "react-router-dom";
 import useForm from "../../hooks/use-form";
-import {RootState} from "../../index";
+import {useAppDispatch, useAppSelector} from "../../services/hooks";
+import {resetPassword} from "../../services/thunks/auth";
 
 
 const ResetPassword: FC = () => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const {isResetPasswordAvailable} = useSelector((state: RootState) => state.auth)
+    const {isResetPasswordAvailable} = useAppSelector(state => state.auth)
 
     const {values, handleChange} = useForm({
         password: '',
@@ -25,7 +24,7 @@ const ResetPassword: FC = () => {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        dispatch(resetPassword(password, resetCode) as any)
+        dispatch(resetPassword(password, resetCode))
         navigate("/login");
     }
 

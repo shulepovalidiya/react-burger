@@ -1,8 +1,6 @@
 import React, {FC} from "react";
 import {Navigate} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {RootState} from "../../index";
-
+import {useAppSelector} from "../../services/hooks";
 
 type TProtectedRouteElementProps = {
     onlyUnAuth: boolean;
@@ -11,7 +9,7 @@ type TProtectedRouteElementProps = {
 
 const ProtectedRouteElement: FC<TProtectedRouteElementProps> = ({onlyUnAuth = false, children}) => {
 
-    const {loggedIn, authChecked} = useSelector((store: RootState) => store.auth);
+    const {loggedIn, authChecked} = useAppSelector(store => store.auth);
 
     if (!authChecked) {
         return null;

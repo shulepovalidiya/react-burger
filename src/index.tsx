@@ -55,7 +55,7 @@ root.render(
 
 );
 
-export type RootState = ReturnType<typeof store.getState>
+// export type RootState = ReturnType<typeof store.getState>
 
 
 // If you want to start measuring performance in your app, pass a function

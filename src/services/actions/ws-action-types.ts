@@ -1,4 +1,4 @@
-import {TMessageResponse} from "../middleware/socket-middleware";
+import {TOrdersResponse} from "../types/data"
 
 export const WS_CONNECTION_START: 'WS_CONNECTION_START' = 'WS_CONNECTION_START';
 export const WS_CONNECTION_SUCCESS: 'WS_CONNECTION_SUCCESS' = 'WS_CONNECTION_SUCCESS';
@@ -25,7 +25,7 @@ export type TWsConnectionClosedAction = {
 
 export type TWsGetOrdersAction = {
     readonly type: typeof WS_GET_ORDERS,
-    payload: TMessageResponse,
+    payload: TOrdersResponse,
 }
 
 export type TWSActions =

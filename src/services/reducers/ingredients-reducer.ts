@@ -14,9 +14,9 @@ import {
     REORDER_INGREDIENTS,
     CUT_INGREDIENT,
     TIngredientsActions
-} from "../actions/burger-ingredients";
+} from "../actions/ingredients";
 
-import {TIngredient} from "../../components/app/App";
+import {TIngredient} from "../types/ingredients";
 
 type TIngredientsState = {
     ingredients: TIngredient[];

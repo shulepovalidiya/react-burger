@@ -1,36 +1,22 @@
-import type {AnyAction, Middleware, MiddlewareAPI} from 'redux';
+import type {Middleware, MiddlewareAPI} from 'redux';
 import {
     TWSActions, TWSStoreActions
 } from "../actions/ws-action-types";
-
-import type {ThunkDispatch} from 'redux-thunk';
-import {TOrder} from "../reducers/ws-reducer";
-
-import {store} from "../../index";
-import {TIngredientsActions} from "../actions/burger-ingredients";
+import {TIngredientsActions} from "../actions/ingredients";
 import {TAuthActions} from "../actions/auth";
-
-export type AppDispatch = ThunkDispatch<RootState, unknown, AppActions>;
-export type RootState = ReturnType<typeof store.getState>;
-
-export type TMessageResponse = {
-    success: boolean;
-    orders: TOrder[];
-    total: number;
-    totalToday: number;
-}
+import {AppDispatch, RootState} from "../types";
+import {TOrdersResponse} from "../types/data";
 
 export type AppActions =
     | TIngredientsActions
     | TAuthActions
     | TWSActions
 
-
 export const socketMiddleware = (wsURL: string, wsActions: TWSStoreActions): Middleware => {
     return ((store: MiddlewareAPI<AppDispatch, RootState>) => {
         let socket: WebSocket | null = null;
 
-        return next => (action: AnyAction) => {
+        return next => (action) => {
             const {dispatch} = store;
             const {type, payload} = action;
             const {wsInit, onError, onOpen, onClose, onMessage} = wsActions;
@@ -59,8 +45,7 @@ export const socketMiddleware = (wsURL: string, wsActions: TWSStoreActions): Mid
 
                 socket.onmessage = event => {
                     const {data} = event;
-                    const parsedData: TMessageResponse = JSON.parse(data);
-                    console.log(socket!.url)
+                    const parsedData: TOrdersResponse = JSON.parse(data);
                     dispatch({
                             type: onMessage,
                             payload: parsedData,

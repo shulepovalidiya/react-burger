@@ -2,14 +2,14 @@ import React, {FC, FormEvent} from "react";
 import FormTemplate from "../../components/form-template/form-template";
 import {EmailInput, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import NavCaption from "../../components/nav-caption/nav-caption";
-import {useDispatch} from "react-redux";
-import {authorize} from "../../services/actions/auth";
 import {useNavigate} from "react-router-dom";
 import useForm from "../../hooks/use-form";
+import {useAppDispatch} from "../../services/hooks";
+import {authorize} from "../../services/thunks/auth";
 
 const SignIn: FC = () => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const {values, handleChange} = useForm({email: '', password: ''})

@@ -1,4 +1,4 @@
-import {TIngredientType} from "../components/app/App";
+import {TIngredientType} from "../services/types/ingredients";
 
 export const BASE_URL: string = 'https://norma.nomoreparties.space/api';
 

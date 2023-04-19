@@ -1,10 +1,10 @@
 import React, {useRef, FC} from "react";
 import {ConstructorElement, DragIcon} from "@ya.praktikum/react-developer-burger-ui-components";
-import {CUT_INGREDIENT, DELETE_INGREDIENT, REORDER_INGREDIENTS} from "../../services/actions/burger-ingredients";
-import {useDispatch} from "react-redux";
+import {CUT_INGREDIENT, DELETE_INGREDIENT, REORDER_INGREDIENTS} from "../../services/actions/ingredients";
 import {useDrag, useDrop} from "react-dnd";
 import styles from './burger-constructor-draggable-element.module.css';
-import {TIngredient} from "../app/App";
+import {useAppDispatch} from "../../services/hooks";
+import {TIngredient} from "../../services/types/ingredients";
 
 type TBurgerConstructorDraggableElementProps = {
     ingredient: TIngredient,
@@ -15,7 +15,7 @@ const BurgerConstructorDraggableElement: FC<TBurgerConstructorDraggableElementPr
 
     const {name, image, price} = ingredient;
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const handleDelete = (index: number) => {
         dispatch({
@@ -24,7 +24,7 @@ const BurgerConstructorDraggableElement: FC<TBurgerConstructorDraggableElementPr
         })
     };
 
-    const ref: any =useRef();
+    const ref: any = useRef();
 
     const [{ handlerId }, drop] = useDrop({
         accept: ["constructorElement"],

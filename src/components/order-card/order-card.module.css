@@ -21,6 +21,10 @@
     width: 100%;
 }
 
+.orderStatus {
+    width: 100%;
+}
+
 .ul {
     display: flex;
     justify-content: flex-start;
@@ -33,10 +37,6 @@
     padding: 0;
     margin: 0;
 }
-
-/*.li:last-of-type img {*/
-/*    opacity: 60%;*/
-/*}*/
 
 .li:first-of-type > div {
     margin-left: -16px;

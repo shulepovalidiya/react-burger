@@ -1,23 +1,20 @@
 import React, {FC} from "react";
-import {TIngredient} from "../app/App";
-import {useSelector} from "react-redux";
-import {RootState} from "../../index";
 import styles from "./order-card.module.css"
 import IngredientIcon from "../ingredient-icon/ingredient-icon";
 import {CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
-import {TOrder} from "../../services/reducers/ws-reducer";
 import {FormattedDate} from "@ya.praktikum/react-developer-burger-ui-components";
+import {useAppSelector} from "../../services/hooks";
+import {TOrder, TOrderStatus} from "../../services/types/orders";
+import {TIngredient} from "../../services/types/ingredients";
 
-type TOrderCard = {
+type TOrderCardProps = {
     order: TOrder;
     isHistory?: boolean;
 }
 
-export type TOrderStatus = "done" | "pending" | "created"
+const OrderCard: FC<TOrderCardProps> = ({order, isHistory}) => {
 
-const OrderCard: FC<TOrderCard> = ({order, isHistory}) => {
-
-    const {ingredients}: { ingredients: TIngredient[] } = useSelector((state: RootState) => state.ingredients)
+    const {ingredients}: { ingredients: TIngredient[] } = useAppSelector(state => state.ingredients)
 
     const getIngredientDataByID = (ingredientID: string) => ingredients && ingredients.find(ingredient => ingredient._id === ingredientID)
 
@@ -50,8 +47,7 @@ const OrderCard: FC<TOrderCard> = ({order, isHistory}) => {
             </div>
             <h2 className={`text text_type_main-medium mt-6 ${styles.name}`}>{order.name}</h2>
             {isHistory &&
-                <span className={`text text text_type_main-default mt-2 ${isDone(order.status) && "text_color_success"}`}
-                      style={{width: "100%"}}>
+                <span className={`text text text_type_main-default mt-2 ${isDone(order.status) && "text_color_success"} ${styles.orderStatus}`}>
                     {translateStatus(order.status)}
                 </span>
             }

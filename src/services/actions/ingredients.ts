@@ -1,6 +1,4 @@
-import api from "../../utils/api";
-import {Dispatch} from "redux";
-import {TIngredient} from "../../components/app/App";
+import {TIngredient} from "../types/ingredients";
 
 export const GET_INGREDIENTS_REQUEST: 'GET_INGREDIENTS_REQUEST' = 'GET_INGREDIENTS_REQUEST';
 export const GET_INGREDIENTS_SUCCESS: 'GET_INGREDIENTS_SUCCESS' = 'GET_INGREDIENTS_SUCCESS';
@@ -128,27 +126,5 @@ export const getOrderNumberSuccessAction = (orderNumber: number): TGetOrderNumbe
 export const getOrderNumberFailedAction = (): TGetOrderNumberFailedAction => ({
     type: GET_ORDER_NUMBER_FAILED
 })
-
-export function getIngredients() {
-    return function (dispatch: Dispatch<TIngredientsActions>) {
-        dispatch(getIngredientsAction());
-        api.getIngredientsArray()
-            .then(res => {
-                dispatch(getIngredientsSuccessAction(res.data))
-            })
-            .catch(() => dispatch(getIngredientsFailedAction()))
-    }
-}
-
-export function getOrderNumber(ingredientsID: string[]) {
-    return function(dispatch: Dispatch<TIngredientsActions>) {
-        dispatch(getOrderNumberAction())
-        api.getOrderNumber(ingredientsID)
-            .then(res => {
-                dispatch(getOrderNumberSuccessAction(res.order.number))
-            })
-            .catch(() => dispatch(getOrderNumberFailedAction()))
-    }
-}
 
 

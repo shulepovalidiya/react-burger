@@ -11,6 +11,11 @@
     width: 100%;
 }
 
+.modalOrderNumber {
+    margin-top: -22px;
+    width: 100%;
+}
+
 .ingredientsList {
     display: flex;
     flex-direction: column;
@@ -20,6 +25,12 @@
     overflow: auto;
     gap: 16px;
     margin: 0;
+}
+
+.ingredientIconContainer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
 .ingredientsList::-webkit-scrollbar {

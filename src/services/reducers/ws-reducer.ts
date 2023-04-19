@@ -6,15 +6,7 @@ import {
     WS_GET_ORDERS,
 } from "../actions/ws-action-types";
 
-export type TOrder = {
-    ingredients: string[];
-    _id: string;
-    name: string;
-    status: "created" | "pending" | "done";
-    number: number;
-    createdAt: string;
-    updatedAt: string;
-}
+import {TOrder} from "../types/orders";
 
 type TWSState = {
     wsConnected: boolean;

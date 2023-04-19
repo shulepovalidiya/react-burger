@@ -6,14 +6,13 @@
     gap: 24px;
     overflow: auto;
     list-style-type: none;
-    padding: 0;
+    padding: 0 8px 0 0;
     margin: 0;
 }
 
 .container::-webkit-scrollbar {
     width: 8px;
     background-color: transparent;
-    margin-left: 8px;
 }
 
 .container::-webkit-scrollbar-thumb {

@@ -2,15 +2,15 @@ import React, {FC, FormEvent} from "react";
 import FormTemplate from "../../components/form-template/form-template";
 import {EmailInput, PasswordInput, Input} from "@ya.praktikum/react-developer-burger-ui-components";
 import NavCaption from "../../components/nav-caption/nav-caption";
-import {register} from "../../services/actions/auth";
-import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import useForm from "../../hooks/use-form";
+import {useAppDispatch} from "../../services/hooks";
+import {register} from "../../services/thunks/auth";
 
 const Register: FC = () => {
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const {values, handleChange} = useForm({
         email: '',

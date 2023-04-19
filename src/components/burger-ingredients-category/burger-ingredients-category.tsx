@@ -1,12 +1,11 @@
 import React, {FC} from "react";
 import BurgerIngredientsStyles from "../burger-ingredients/burger-ingredients.module.css";
 import BurgerIngredientsElement from "../burger-ingredients-element/burger-ingredients-element";
-import { useSelector, } from "react-redux";
 import {useLocation, Link} from "react-router-dom";
 import {ingredientTypes} from "../../utils/constants";
 import styles from "./burger-ingredients-category.module.css"
-import {TIngredientType, TIngredient} from "../app/App";
-import {RootState} from "../../index";
+import {useAppSelector} from "../../services/hooks";
+import {TIngredient, TIngredientType} from "../../services/types/ingredients";
 
 type TBurgerIngredientsCategory = {
     ingredientType: TIngredientType;
@@ -18,17 +17,16 @@ const BurgerIngredientsCategory: FC<TBurgerIngredientsCategory> = ({ingredientTy
 
     const {bun, sauce, main} = ingredientTypes;
 
-    const {ingredients} : {ingredients: TIngredient[]} = useSelector((state: RootState) => state.ingredients);
+    const {ingredients} : {ingredients: TIngredient[]} = useAppSelector(state => state.ingredients);
 
     function getCategoryName() {
-        let categoryName = "";
         switch(ingredientType) {
             case bun:
-                return categoryName = "Булки";
+                return "Булки";
             case sauce:
-                return categoryName = "Соусы";
+                return "Соусы";
             case main:
-                return categoryName = "Начинки";
+                return "Начинки";
         }
     }
 

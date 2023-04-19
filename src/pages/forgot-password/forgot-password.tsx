@@ -2,21 +2,20 @@ import React, {useState, FC, FormEvent, ChangeEvent} from "react";
 import FormTemplate from "../../components/form-template/form-template";
 import {EmailInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import NavCaption from "../../components/nav-caption/nav-caption";
-import {useDispatch, useSelector} from "react-redux";
-import {sendPasswordRecoveryCode} from "../../services/actions/auth";
 import {useNavigate} from "react-router-dom";
-import {RootState} from "../../index";
+import {useAppDispatch, useAppSelector} from "../../services/hooks";
+import {sendPasswordRecoveryCode} from "../../services/thunks/auth";
 
 
 const ForgotPassword: FC = () => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const [email, setEmail] = useState<string>('');
 
     const {isResetPasswordAvailable} :
-        {isResetPasswordAvailable: boolean} = useSelector((state: RootState) => state.auth)
+        {isResetPasswordAvailable: boolean} = useAppSelector(state => state.auth)
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();

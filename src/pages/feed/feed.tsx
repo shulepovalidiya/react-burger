@@ -3,18 +3,16 @@ import styles from "./feed.module.css"
 import OrderCard from "../../components/order-card/order-card";
 import OrdersMonitor from "../../components/orders-monitor/orders-monitor";
 import OrdersStats from "../../components/orders-stats/orders-stats";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../index";
-import {TOrder} from "../../services/reducers/ws-reducer";
 import {Link, useLocation} from "react-router-dom";
 import {WS_CONNECTION_CLOSED, WS_CONNECTION_START} from "../../services/actions/ws-action-types";
-import { v4 as uuidv4 } from 'uuid';
+import {useAppDispatch, useAppSelector} from "../../services/hooks";
+import {TOrder, TOrderStatus} from "../../services/types/orders";
 
 
 export const Feed: FC = () => {
 
     const location = useLocation();
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const {
         orders,
@@ -24,7 +22,7 @@ export const Feed: FC = () => {
         orders: TOrder[],
         total: number,
         totalToday: number,
-    } = useSelector((state: RootState) => state.orders);
+    } = useAppSelector(state => state.orders);
 
     useEffect(() => {
         dispatch({
@@ -36,7 +34,7 @@ export const Feed: FC = () => {
         }
     }, [dispatch])
 
-    const getOrderNumbersByStatus = (status: "done" | "pending" | "created", ordersCount: number) => {
+    const getOrderNumbersByStatus = (status: TOrderStatus, ordersCount: number) => {
         const result: number[] = [];
         orders && orders
             .filter(order => order.status === status)
@@ -50,7 +48,7 @@ export const Feed: FC = () => {
             <ul className={styles.ordersList}>
                 {orders && orders.map((order) => {
                     if (order) {
-                        return <li style={{listStyleType: "none", width: "100%",}} key={uuidv4()}>
+                        return <li className={styles.ordersListElement} key={order._id}>
                             <Link to={`/feed/${order._id}`} className={styles.link}
                                   state={{backgroundLocation: location}}>
                                 <OrderCard order={order}/>
@@ -64,11 +62,11 @@ export const Feed: FC = () => {
                 <div className={styles.ordersBoard}>
                     <OrdersMonitor
                         status={"Готовы:"}
-                        orders={getOrderNumbersByStatus("done", 10)}
+                        orderNumbers={getOrderNumbersByStatus("done", 10)}
                         isCompleted={true}/>
                     <OrdersMonitor
                         status={"В работе:"}
-                        orders={getOrderNumbersByStatus("pending", 10)}/>
+                        orderNumbers={getOrderNumbersByStatus("pending", 10)}/>
                 </div>
                 <OrdersStats heading={"Выполнено за все время:"} ordersCount={total}/>
                 <OrdersStats heading={"Выполнено за сегодня:"} ordersCount={totalToday}/>
