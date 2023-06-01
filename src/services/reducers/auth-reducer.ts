@@ -53,6 +53,7 @@ type TAuthState = {
     recoveryCodeFailed: boolean,
     refreshTokenRequest: boolean,
     refreshTokenFailed: boolean,
+    refreshTokenSuccess: boolean,
 }
 
 const authState: TAuthState = {
@@ -77,6 +78,7 @@ const authState: TAuthState = {
     recoveryCodeRequest: false,
     recoveryCodeFailed: false,
     refreshTokenRequest: false,
+    refreshTokenSuccess: false,
     refreshTokenFailed: false,
 }
 
@@ -236,7 +238,7 @@ export const authReducer = (state: TAuthState = authState, action: TAuthActions)
         case REFRESH_TOKEN_SUCCESS: {
             return {
                 ...state,
-                refreshTokenRequest: true,
+                refreshTokenSuccess: true,
             }
         }
         case REFRESH_TOKEN_FAILED: {
