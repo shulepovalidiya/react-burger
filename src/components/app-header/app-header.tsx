@@ -21,7 +21,7 @@ const AppHeader: FC = () => {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink className={styles.button} to={"/orders"}>
+                        <NavLink className={styles.button} to={"/feed"}>
                             {
                                 ({isActive}) => <AppHeaderLink
                                     isActive={isActive}

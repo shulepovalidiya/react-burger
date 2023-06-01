@@ -1,0 +1,22 @@
+.div {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    border-radius: 100px;
+    border: 2px solid transparent;
+    box-sizing: border-box;
+    margin-left: -16px;
+    background: linear-gradient(#1C1C21, #1C1C21) content-box, linear-gradient(to right, #801AB2, #4C4CFF) border-box;
+}
+
+.img {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+}
+
+
+
+
+

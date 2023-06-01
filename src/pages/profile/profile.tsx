@@ -1,12 +1,12 @@
 import React, {FC} from "react";
 import {NavLink, useNavigate, Outlet} from "react-router-dom";
 import styles from "./profile.module.css"
-import {useDispatch} from "react-redux";
-import {logout} from "../../services/actions/auth";
+import {useAppDispatch} from "../../services/hooks";
+import {logout} from "../../services/thunks/auth";
 
 const Profile: FC = () => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const setActive = ({isActive} : {isActive: boolean;}) =>
@@ -14,7 +14,7 @@ const Profile: FC = () => {
 
     const handleLogout = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
-        dispatch(logout() as any);
+        dispatch(logout());
         navigate("/");
     }
 

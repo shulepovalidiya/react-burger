@@ -1,0 +1,29 @@
+.container {
+    min-width: 844px;
+    max-height: 916px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    overflow: auto;
+    list-style-type: none;
+    padding: 0 8px 0 0;
+    margin: 0;
+}
+
+.container::-webkit-scrollbar {
+    width: 8px;
+    background-color: transparent;
+}
+
+.container::-webkit-scrollbar-thumb {
+    background-color: #8585AD;
+}
+
+.container::-webkit-scrollbar-track-piece {
+    background-color: #2F2F37
+}
+
+.link {
+    text-decoration: none;
+    color: #FFFFFF;
+}

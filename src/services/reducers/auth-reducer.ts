@@ -26,11 +26,36 @@ import {
 
     RECOVERY_CODE_REQUEST,
     RECOVERY_CODE_SUCCESS,
-    RECOVERY_CODE_FAILED, REFRESH_TOKEN_REQUEST, REFRESH_TOKEN_SUCCESS, REFRESH_TOKEN_FAILED, AUTH_CHECKED
+    RECOVERY_CODE_FAILED, REFRESH_TOKEN_REQUEST, REFRESH_TOKEN_SUCCESS, REFRESH_TOKEN_FAILED, AUTH_CHECKED, TAuthActions
 
 } from "../actions/auth";
 
-const initialState = {
+type TAuthState = {
+    authChecked: boolean,
+    loggedIn: boolean,
+    isResetPasswordAvailable: boolean,
+    registrationRequest: boolean,
+    registrationFailed: boolean,
+    currentLogin: string,
+    currentName: string,
+    authorizationRequest: boolean,
+    authorizationFailed: boolean,
+    accessToken: null | string,
+    getUserInfoRequest: boolean,
+    getUserInfoFailed: boolean,
+    updateUserInfoRequest: boolean,
+    updateUserInfoFailed: boolean,
+    logoutRequest: boolean,
+    logoutFailed: boolean,
+    resetPasswordRequest: boolean,
+    resetPasswordFailed: boolean,
+    recoveryCodeRequest: boolean,
+    recoveryCodeFailed: boolean,
+    refreshTokenRequest: boolean,
+    refreshTokenFailed: boolean,
+}
+
+const authState: TAuthState = {
     authChecked: false,
     loggedIn: !!localStorage.getItem("accessToken"),
     isResetPasswordAvailable: false,
@@ -55,7 +80,7 @@ const initialState = {
     refreshTokenFailed: false,
 }
 
-export const authReducer = (state = initialState, action) => {
+export const authReducer = (state: TAuthState = authState, action: TAuthActions) => {
     switch (action.type) {
         case REGISTRATION_REQUEST: {
             return {

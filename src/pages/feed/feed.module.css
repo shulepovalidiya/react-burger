@@ -1,0 +1,60 @@
+.section {
+    margin: auto;
+    max-width: 1240px;
+    display: grid;
+    grid-template-areas: "header header" "left right" "left right";
+    column-gap: 60px;
+}
+
+.section > h1 {
+    grid-area: header;
+}
+
+.ordersList {
+    grid-area: left;
+    max-width: 580px;
+    max-height: 852px;
+    padding: 0 8px 0 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow: auto;
+}
+
+.ordersListElement {
+    list-style-type: none;
+    width: 100%;
+}
+
+.ordersList::-webkit-scrollbar {
+    width: 8px;
+    background-color: transparent;
+}
+
+.ordersList::-webkit-scrollbar-thumb {
+    background-color: #8585AD;
+}
+
+.ordersList::-webkit-scrollbar-track-piece {
+    background-color: #2F2F37
+}
+
+.ordersStats {
+    grid-area: right;
+    width: 580px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+
+.ordersBoard {
+    display: flex;
+    gap: 36px;
+}
+
+.link {
+    text-decoration: none;
+    color: #FFFFFFFF;
+}

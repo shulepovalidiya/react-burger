@@ -1,36 +1,50 @@
 import {
     INGREDIENT_CLICK,
-
     GET_INGREDIENTS_REQUEST,
     GET_INGREDIENTS_SUCCESS,
     GET_INGREDIENTS_FAILED,
-
     CLOSE_INGREDIENTS_MODAL,
-
     GET_ORDER_NUMBER_FAILED,
     GET_ORDER_NUMBER_REQUEST,
     GET_ORDER_NUMBER_SUCCESS,
-
     INGREDIENT_DROP,
     BUN_DROP,
     DELETE_INGREDIENT,
     CLOSE_ORDER_MODAL,
     REORDER_INGREDIENTS,
     CUT_INGREDIENT,
-} from "../actions/burger-ingredients";
+    TIngredientsActions
+} from "../actions/ingredients";
 
+import {TIngredient} from "../types/ingredients";
 
-const initialState = {
+type TIngredientsState = {
+    ingredients: TIngredient[];
+    ingredientsRequest: boolean;
+    ingredientsFailed: boolean;
+    draggedIngredient: TIngredient | {};
+    draggedIngredients: TIngredient[];
+    currentIngredient: TIngredient | null;
+    currentBun: TIngredient | null;
+    orderNumber: number | null;
+    orderNumberRequest: boolean,
+    orderNumberRequestFailed: boolean;
+    reorderedIngredients: TIngredient[];
+    registrationRequest: boolean;
+    registrationRequestFailed: boolean;
+    currentLogin: string | null;
+    currentToken: string | null;
+    currentName: string | null;
+}
+
+const ingredientsState: TIngredientsState = {
     ingredients: [],
-    backgroundLocation: null,
     ingredientsRequest: false,
     ingredientsFailed: false,
     draggedIngredient: {},
     draggedIngredients: [],
     currentIngredient: null,
     currentBun: null,
-    currentTab: "bun",
-    orderData: [],
     orderNumber: null,
     orderNumberRequest: false,
     orderNumberRequestFailed: false,
@@ -42,7 +56,7 @@ const initialState = {
     currentName: null,
 }
 
-export const ingredientsReducer = (state = initialState, action) => {
+export const ingredientsReducer = (state: TIngredientsState = ingredientsState, action: TIngredientsActions) => {
     switch (action.type) {
         case GET_INGREDIENTS_REQUEST: {
             return {

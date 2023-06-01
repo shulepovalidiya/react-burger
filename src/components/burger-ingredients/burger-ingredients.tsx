@@ -6,7 +6,7 @@ import BurgerIngredientsCategory from "../burger-ingredients-category/burger-ing
 import {Link} from "react-scroll";
 import {ingredientTypes} from "../../utils/constants";
 import {InView} from "react-intersection-observer";
-import {TIngredientType} from "../app/App";
+import {TIngredientType} from "../../services/types/ingredients";
 
 const BurgerIngredients: FC = () => {
 

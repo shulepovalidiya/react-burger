@@ -33,7 +33,7 @@ const Modal: FC<TModalProps> = ({children, header, onClose}) => {
             <div className={`${modalStyles.opened}`}>
                 <div className={`${modalStyles.header} mt-10 mr-10 ml-10`}>
                     <h2 className="text text_type_main-large">{header}</h2>
-                    <CloseIcon onClick={onClose} type={"primary"} />
+                    <CloseIcon onClick={onClose} type={"primary"}/>
                 </div>
                 {children}
             </div>

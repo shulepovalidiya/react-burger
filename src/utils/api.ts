@@ -54,7 +54,7 @@ class Api {
         return this.request(`${this.base_url}/ingredients`, {})
     }
 
-    getOrderNumber(ingredientsID: string) {
+    getOrderNumber(ingredientsID: string[]) {
         return this.fetchWithRefresh(`${this.base_url}/orders`, {
             method: 'POST',
             headers: {

@@ -1,12 +1,11 @@
 import React, {FC} from "react";
 import ElementStyles from "./burger-ingredients-element.module.css";
 import {Counter, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
-import {INGREDIENT_CLICK} from "../../services/actions/burger-ingredients";
-import {useDispatch, useSelector} from "react-redux";
+import {INGREDIENT_CLICK} from "../../services/actions/ingredients";
 import {useDrag} from "react-dnd";
-import {RootState} from "../../index";
-import {TIngredient} from "../app/App";
 import {ingredientTypes} from "../../utils/constants";
+import {useAppDispatch, useAppSelector} from "../../services/hooks";
+import {TIngredient} from "../../services/types/ingredients";
 
 type TBurgerIngredientsElementProps = {
     id: string;
@@ -14,13 +13,13 @@ type TBurgerIngredientsElementProps = {
 
 const BurgerIngredientsElement: FC<TBurgerIngredientsElementProps> = ({id}) => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const {ingredients, draggedIngredients, currentBun} : {
         ingredients: TIngredient[];
         draggedIngredients: TIngredient[];
         currentBun: TIngredient;
     }
-        = useSelector((state: RootState) => state.ingredients)
+        = useAppSelector(state => state.ingredients)
     const ingredientData: TIngredient = ingredients.find(item => item._id === id)!
 
     const {bun} = ingredientTypes;

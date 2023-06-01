@@ -8,25 +8,25 @@ import {
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import {ingredientTypes} from "../../utils/constants";
-import {useDispatch, useSelector} from "react-redux";
 import BurgerConstructorDraggableElement
     from "../burger-constructor-draggable-element/burger-constructor-draggable-element";
 import {
     BUN_DROP,
     CLOSE_ORDER_MODAL,
     INGREDIENT_DROP,
-    getOrderNumber,
-} from "../../services/actions/burger-ingredients";
+
+} from "../../services/actions/ingredients";
 import {useDrop} from "react-dnd";
 import { v4 as uuidv4 } from 'uuid';
 import {useNavigate} from "react-router-dom";
-import {RootState} from "../../index";
-import {TIngredient, TIngredientType} from "../app/App";
+import {useAppDispatch, useAppSelector} from "../../services/hooks";
+import {TIngredient, TIngredientType} from "../../services/types/ingredients";
+import {getOrderNumber} from "../../services/thunks/ingredients";
 
 
 function BurgerConstructor() {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const {bun} = ingredientTypes;
@@ -40,9 +40,9 @@ function BurgerConstructor() {
         draggedIngredients: TIngredient[],
         currentBun: TIngredient,
         orderNumber: number,
-    } = useSelector((state: RootState) => state.ingredients)
+    } = useAppSelector(state => state.ingredients)
 
-    const {loggedIn} = useSelector((state: RootState) => state.auth)
+    const {loggedIn} = useAppSelector(state => state.auth)
 
     const getIngredientsID = () => {
         let ingredientsID = [];
@@ -54,7 +54,7 @@ function BurgerConstructor() {
 
     const handleSubmitBtnClick = () => {
         loggedIn
-            ? dispatch(getOrderNumber(getIngredientsID()) as any)
+            ? dispatch(getOrderNumber(getIngredientsID()))
             : navigate("/login")
     };
 
@@ -82,12 +82,12 @@ function BurgerConstructor() {
             getIngredientTypeById(itemId.id) === bun
                 ? dispatch({
                     type: BUN_DROP,
-                    data: ingredients.find(ingredient => ingredient._id === itemId.id),
+                    data: ingredients.find(ingredient => ingredient._id === itemId.id)!,
                 })
                 : dispatch({
                     type: INGREDIENT_DROP,
                     data: {
-                        ...ingredients.find(ingredient => ingredient._id === itemId.id),
+                        ...ingredients.find(ingredient => ingredient._id === itemId.id)!,
                         uuid: uuidv4(),
                     },
                 })

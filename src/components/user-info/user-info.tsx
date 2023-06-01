@@ -1,19 +1,18 @@
 import React, {useEffect, useState, FC, FormEvent} from "react";
 import styles from "../../pages/profile/profile.module.css";
 import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
-import {getUserInfo, updateUserInfo} from "../../services/actions/auth";
-import {useDispatch, useSelector} from "react-redux";
 import useForm from "../../hooks/use-form";
-import {RootState} from "../../index";
+import {useAppDispatch, useAppSelector} from "../../services/hooks";
+import {getUserInfo, updateUserInfo} from "../../services/thunks/auth";
 
 const UserInfo: FC = () => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const {currentName, currentLogin} : {
         currentName: string;
         currentLogin: string;
-    } = useSelector((state: RootState) => state.auth);
+    } = useAppSelector(state => state.auth);
 
     const {values, handleChange, setValues} = useForm({
         name: currentName,
@@ -65,7 +64,7 @@ const UserInfo: FC = () => {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        dispatch(updateUserInfo(name, email, password) as any);
+        dispatch(updateUserInfo(name, email, password));
         setIsInputEdited(false);
         setDisabled({
             name: true,
