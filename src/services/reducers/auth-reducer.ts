@@ -56,7 +56,7 @@ type TAuthState = {
     refreshTokenSuccess: boolean,
 }
 
-const authState: TAuthState = {
+export const authState: TAuthState = {
     authChecked: false,
     loggedIn: !!localStorage.getItem("accessToken"),
     isResetPasswordAvailable: false,

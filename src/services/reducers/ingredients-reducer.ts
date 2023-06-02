@@ -34,7 +34,7 @@ type TIngredientsState = {
     currentName: string | null;
 }
 
-const ingredientsState: TIngredientsState = {
+export const ingredientsState: TIngredientsState = {
     ingredients: [],
     ingredientsRequest: false,
     ingredientsFailed: false,

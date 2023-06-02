@@ -1,49 +1,33 @@
-import {wsReducer} from "./ws-reducer";
+import {wsReducer, initialState} from "./ws-reducer";
 
 describe('ws reducer', () => {
     it('should return the initial state', () => {
-        expect(wsReducer(undefined, {} as any)).toEqual(
-            {
-                wsConnected: false,
-                orders: [],
-                success: false,
-                total: 0,
-                totalToday: 0,
-            })
+        expect(wsReducer(undefined, {} as any)).toEqual(initialState)
     })
 
     it('should handle WS_CONNECTION_SUCCESS', () => {
         expect(wsReducer(undefined, {type: "WS_CONNECTION_SUCCESS"}))
             .toStrictEqual({
-                wsConnected: true,
-                orders: [],
-                success: false,
-                total: 0,
-                totalToday: 0,
+                ...initialState,
                 error: undefined,
+                wsConnected: true
             })
     })
 
     it('should handle WS_CONNECTION_ERROR', () => {
         expect(wsReducer(undefined, {type: "WS_CONNECTION_ERROR"}))
             .toEqual({
-                wsConnected: false,
-                orders: [],
-                success: false,
-                total: 0,
-                totalToday: 0,
+                ...initialState,
+                wsConnected: false
             })
     })
 
     it('should handle WS_CONNECTION_CLOSED', () => {
         expect(wsReducer(undefined, {type: "WS_CONNECTION_CLOSED"}))
             .toStrictEqual({
-                wsConnected: false,
+                ...initialState,
                 error: undefined,
-                orders: [],
-                success: false,
-                total: 0,
-                totalToday: 0,
+                wsConnected: false,
             })
     })
 
@@ -51,16 +35,18 @@ describe('ws reducer', () => {
         expect(wsReducer(undefined, {type: "WS_GET_ORDERS", payload: {
                 success: true,
                 orders: [],
-                total: 0,
-                totalToday: 0,
+                total: 34543345,
+                totalToday: 56445,
             }})).toStrictEqual(
             {
+                ...initialState,
                 wsConnected: true,
                 error: undefined,
                 success: true,
                 orders: [],
-                total: 0,
-                totalToday: 0}
+                total: 34543345,
+                totalToday: 56445,
+                }
         )
     })
 })

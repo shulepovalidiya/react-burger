@@ -1,332 +1,131 @@
-import {ingredientsReducer} from "./ingredients-reducer";
+import {ingredientsReducer, ingredientsState} from "./ingredients-reducer";
+import {mockBun, mockIngredient, mockIngredientsArray} from "../../utils/mock-data";
+import exp from "constants";
 
 describe('ingredients reducer', () => {
-    it('should return initial state', () => {
-        expect(ingredientsReducer(undefined, {} as any))
-            .toEqual({
-                ingredients: [],
-                ingredientsRequest: false,
-                ingredientsFailed: false,
-                draggedIngredient: {},
-                draggedIngredients: [],
-                currentBun: null,
-                orderNumber: null,
-                orderNumberRequest: false,
-                orderNumberRequestFailed: false,
-                reorderedIngredients: [],
-                registrationRequest: false,
-                registrationRequestFailed: false,
-                currentLogin: null,
-                currentToken: null,
-                currentName: null,
-            })
+
+    it('should return the initial state', () => {
+        expect(ingredientsReducer(undefined, {} as any)).toEqual(ingredientsState)
     })
+
     it('should handle GET_INGREDIENTS_REQUEST', () => {
-        expect(ingredientsReducer(undefined, {type: "GET_INGREDIENTS_REQUEST"}))
-            .toEqual({
-                ingredients: [],
+        expect(ingredientsReducer(undefined, {type: "GET_INGREDIENTS_REQUEST"})).toEqual(
+            {
+                ...ingredientsState,
                 ingredientsRequest: true,
-                ingredientsFailed: false,
-                draggedIngredient: {},
-                draggedIngredients: [],
-                currentBun: null,
-                orderNumber: null,
-                orderNumberRequest: false,
-                orderNumberRequestFailed: false,
-                reorderedIngredients: [],
-                registrationRequest: false,
-                registrationRequestFailed: false,
-                currentLogin: null,
-                currentToken: null,
-                currentName: null,
-            })
+            }
+        )
     })
+
     it('should handle GET_INGREDIENTS_SUCCESS', () => {
         expect(ingredientsReducer(undefined, {
             type: "GET_INGREDIENTS_SUCCESS",
-            ingredients: [{
-                "_id":"60666c42cc7b410027a1a9b1",
-                "name":"Краторная булка N-200i",
-                "type":"bun",
-                "proteins":80,
-                "fat":24,
-                "carbohydrates":53,
-                "calories":420,
-                "price":1255,
-                "image":"https://code.s3.yandex.net/react/code/bun-02.png",
-                "image_mobile":"https://code.s3.yandex.net/react/code/bun-02-mobile.png",
-                "image_large":"https://code.s3.yandex.net/react/code/bun-02-large.png",
-                "__v":0
-            },]
-        }))
-            .toEqual({
-                ingredients: [{
-                    "_id":"60666c42cc7b410027a1a9b1",
-                    "name":"Краторная булка N-200i",
-                    "type":"bun",
-                    "proteins":80,
-                    "fat":24,
-                    "carbohydrates":53,
-                    "calories":420,
-                    "price":1255,
-                    "image":"https://code.s3.yandex.net/react/code/bun-02.png",
-                    "image_mobile":"https://code.s3.yandex.net/react/code/bun-02-mobile.png",
-                    "image_large":"https://code.s3.yandex.net/react/code/bun-02-large.png",
-                    "__v":0
-                },],
+            ingredients: mockIngredientsArray
+        })).toEqual(
+            {
+                ...ingredientsState,
                 ingredientsRequest: false,
                 ingredientsFailed: false,
-                draggedIngredient: {},
-                draggedIngredients: [],
-                currentBun: null,
-                orderNumber: null,
-                orderNumberRequest: false,
-                orderNumberRequestFailed: false,
-                reorderedIngredients: [],
-                registrationRequest: false,
-                registrationRequestFailed: false,
-                currentLogin: null,
-                currentToken: null,
-                currentName: null,
-            })
+                ingredients: mockIngredientsArray
+            }
+        )
     })
+
     it('should handle GET_INGREDIENTS_FAILED', () => {
         expect(ingredientsReducer(undefined, {type: "GET_INGREDIENTS_FAILED"}))
             .toEqual({
-                ingredients: [],
+                ...ingredientsState,
                 ingredientsRequest: false,
                 ingredientsFailed: true,
-                draggedIngredient: {},
-                draggedIngredients: [],
-                currentBun: null,
-                orderNumber: null,
-                orderNumberRequest: false,
-                orderNumberRequestFailed: false,
-                reorderedIngredients: [],
-                registrationRequest: false,
-                registrationRequestFailed: false,
-                currentLogin: null,
-                currentToken: null,
-                currentName: null,
             })
     })
+
     it('should handle BUN_DROP', () => {
         expect(ingredientsReducer(undefined, {
             type: "BUN_DROP",
-            data: {
-                "_id":"60666c42cc7b410027a1a9b1",
-                "name":"Краторная булка N-200i",
-                "type":"bun",
-                "proteins":80,
-                "fat":24,
-                "carbohydrates":53,
-                "calories":420,
-                "price":1255,
-                "image":"https://code.s3.yandex.net/react/code/bun-02.png",
-                "image_mobile":"https://code.s3.yandex.net/react/code/bun-02-mobile.png",
-                "image_large":"https://code.s3.yandex.net/react/code/bun-02-large.png",
-                "__v":0
-            }
+            data: mockBun,
         })).toEqual({
-            ingredients: [],
-            ingredientsRequest: false,
-            ingredientsFailed: false,
-            draggedIngredient: {},
-            draggedIngredients: [],
-            currentBun: {
-                "_id":"60666c42cc7b410027a1a9b1",
-                "name":"Краторная булка N-200i",
-                "type":"bun",
-                "proteins":80,
-                "fat":24,
-                "carbohydrates":53,
-                "calories":420,
-                "price":1255,
-                "image":"https://code.s3.yandex.net/react/code/bun-02.png",
-                "image_mobile":"https://code.s3.yandex.net/react/code/bun-02-mobile.png",
-                "image_large":"https://code.s3.yandex.net/react/code/bun-02-large.png",
-                "__v":0
-            },
-            orderNumber: null,
-            orderNumberRequest: false,
-            orderNumberRequestFailed: false,
-            reorderedIngredients: [],
-            registrationRequest: false,
-            registrationRequestFailed: false,
-            currentLogin: null,
-            currentToken: null,
-            currentName: null,
-        })
+                ...ingredientsState,
+                currentBun: mockBun
+            })
     })
+
     it('should handle INGREDIENT_DROP', () => {
         expect(ingredientsReducer(undefined, {
             type: "INGREDIENT_DROP",
-            data: {
-                "_id":"60666c42cc7b410027a1a9b5",
-                "name":"Говяжий метеорит (отбивная)",
-                "type":"main",
-                "proteins":800,
-                "fat":800,
-                "carbohydrates":300,
-                "calories":2674,
-                "price":3000,
-                "image":"https://code.s3.yandex.net/react/code/meat-04.png",
-                "image_mobile":"https://code.s3.yandex.net/react/code/meat-04-mobile.png",
-                "image_large":"https://code.s3.yandex.net/react/code/meat-04-large.png",
-                "__v":0
-            }
-        }))
-            .toEqual({
-                ingredients: [],
-                ingredientsRequest: false,
-                ingredientsFailed: false,
-                draggedIngredient: {},
-                draggedIngredients: [{
-                    "_id":"60666c42cc7b410027a1a9b5",
-                    "name":"Говяжий метеорит (отбивная)",
-                    "type":"main",
-                    "proteins":800,
-                    "fat":800,
-                    "carbohydrates":300,
-                    "calories":2674,
-                    "price":3000,
-                    "image":"https://code.s3.yandex.net/react/code/meat-04.png",
-                    "image_mobile":"https://code.s3.yandex.net/react/code/meat-04-mobile.png",
-                    "image_large":"https://code.s3.yandex.net/react/code/meat-04-large.png",
-                    "__v":0
-                }],
-                currentBun: null,
-                orderNumber: null,
-                orderNumberRequest: false,
-                orderNumberRequestFailed: false,
-                reorderedIngredients: [],
-                registrationRequest: false,
-                registrationRequestFailed: false,
-                currentLogin: null,
-                currentToken: null,
-                currentName: null,
-            })
+            data: mockIngredient,
+        })).toEqual({
+            ...ingredientsState,
+            draggedIngredients: [...ingredientsState.draggedIngredients, mockIngredient]
+        })
     })
+
     it('should handle DELETE_INGREDIENT', () => {
-        expect(ingredientsReducer({ingredients: [],
-            ingredientsRequest: false,
-            ingredientsFailed: false,
-            draggedIngredient: {},
-            draggedIngredients: [{
-                "_id":"60666c42cc7b410027a1a9b1",
-                "name":"Краторная булка N-200i",
-                "type":"bun",
-                "proteins":80,
-                "fat":24,
-                "carbohydrates":53,
-                "calories":420,
-                "price":1255,
-                "image":"https://code.s3.yandex.net/react/code/bun-02.png",
-                "image_mobile":"https://code.s3.yandex.net/react/code/bun-02-mobile.png",
-                "image_large":"https://code.s3.yandex.net/react/code/bun-02-large.png",
-                "__v":0
-            },
-                {
-                    "_id":"60666c42cc7b410027a1a9b5",
-                    "name":"Говяжий метеорит (отбивная)",
-                    "type":"main",
-                    "proteins":800,
-                    "fat":800,
-                    "carbohydrates":300,
-                    "calories":2674,
-                    "price":3000,
-                    "image":"https://code.s3.yandex.net/react/code/meat-04.png",
-                    "image_mobile":"https://code.s3.yandex.net/react/code/meat-04-mobile.png",
-                    "image_large":"https://code.s3.yandex.net/react/code/meat-04-large.png",
-                    "__v":0
-                },
-                {
-                    "_id":"60666c42cc7b410027a1a9b6",
-                    "name":"Биокотлета из марсианской Магнолии",
-                    "type":"main",
-                    "proteins":420,
-                    "fat":142,
-                    "carbohydrates":242,
-                    "calories":4242,
-                    "price":424,
-                    "image":"https://code.s3.yandex.net/react/code/meat-01.png",
-                    "image_mobile":"https://code.s3.yandex.net/react/code/meat-01-mobile.png",
-                    "image_large":"https://code.s3.yandex.net/react/code/meat-01-large.png",
-                    "__v":0
-                }],
-            currentBun: null,
-            orderNumber: null,
-            orderNumberRequest: false,
-            orderNumberRequestFailed: false,
-            reorderedIngredients: [],
-            registrationRequest: false,
-            registrationRequestFailed: false,
-            currentLogin: null,
-            currentToken: null,
-            currentName: null,}, {
+        expect(ingredientsReducer(undefined, {
             type: "DELETE_INGREDIENT",
             index: 0,
-        })).toEqual({ingredients: [],
-            ingredientsRequest: false,
-            ingredientsFailed: false,
-            draggedIngredient: {},
-            draggedIngredients: [{
-                "_id":"60666c42cc7b410027a1a9b5",
-                "name":"Говяжий метеорит (отбивная)",
-                "type":"main",
-                "proteins":800,
-                "fat":800,
-                "carbohydrates":300,
-                "calories":2674,
-                "price":3000,
-                "image":"https://code.s3.yandex.net/react/code/meat-04.png",
-                "image_mobile":"https://code.s3.yandex.net/react/code/meat-04-mobile.png",
-                "image_large":"https://code.s3.yandex.net/react/code/meat-04-large.png",
-                "__v":0
-            },
-                {
-                    "_id":"60666c42cc7b410027a1a9b6",
-                    "name":"Биокотлета из марсианской Магнолии",
-                    "type":"main",
-                    "proteins":420,
-                    "fat":142,
-                    "carbohydrates":242,
-                    "calories":4242,
-                    "price":424,
-                    "image":"https://code.s3.yandex.net/react/code/meat-01.png",
-                    "image_mobile":"https://code.s3.yandex.net/react/code/meat-01-mobile.png",
-                    "image_large":"https://code.s3.yandex.net/react/code/meat-01-large.png",
-                    "__v":0
-                }],
-            currentBun: null,
-            orderNumber: null,
-            orderNumberRequest: false,
-            orderNumberRequestFailed: false,
-            reorderedIngredients: [],
-            registrationRequest: false,
-            registrationRequestFailed: false,
-            currentLogin: null,
-            currentToken: null,
-            currentName: null,})
+        })).toEqual({
+            ...ingredientsState,
+            draggedIngredients: ingredientsState.draggedIngredients.filter((item, index) => index != 0)
+        })
     })
+
     it('should handle GET_ORDER_NUMBER_REQUEST', () => {
         expect(ingredientsReducer(undefined, {type: "GET_ORDER_NUMBER_REQUEST"}))
             .toEqual({
-                ingredients: [],
-                ingredientsRequest: false,
-                ingredientsFailed: false,
-                draggedIngredient: {},
+                ...ingredientsState,
+                orderNumberRequest: true,
+            })
+    })
+
+    it('should handle GET_ORDER_NUMBER_SUCCESS', () => {
+        expect(ingredientsReducer(undefined, {
+            type: "GET_ORDER_NUMBER_SUCCESS",
+            orderNumber: 73382828,
+        })).toEqual({
+            ...ingredientsState,
+            orderNumber: 73382828,
+            orderNumberRequest: false,
+        })
+    })
+
+    it('should handle GET_ORDER_NUMBER_FAILED', () => {
+        expect(ingredientsReducer(undefined, {type: "GET_ORDER_NUMBER_FAILED"}))
+            .toEqual({
+                ...ingredientsState,
+                orderNumberRequest: false,
+                orderNumberRequestFailed: true,
+            })
+    })
+
+    it('should handle CLOSE_ORDER_MODAL', () => {
+        expect(ingredientsReducer(undefined, {type: "CLOSE_ORDER_MODAL"}))
+            .toEqual({
+                ...ingredientsState,
+                orderNumber: null,
                 draggedIngredients: [],
                 currentBun: null,
-                orderNumber: null,
-                orderNumberRequest: true,
-                orderNumberRequestFailed: false,
-                reorderedIngredients: [],
-                registrationRequest: false,
-                registrationRequestFailed: false,
-                currentLogin: null,
-                currentToken: null,
-                currentName: null,
             })
+    })
+
+    it('should handle REORDER_INGREDIENTS', () => {
+        expect(ingredientsReducer(undefined, {
+            type: "REORDER_INGREDIENTS",
+            to: 5,
+        })).toEqual({
+            ...ingredientsState,
+            draggedIngredients: [...ingredientsState.reorderedIngredients.slice(0, 5), ingredientsState.draggedIngredient, ...ingredientsState.reorderedIngredients.slice(5)]
+        })
+    })
+
+    it('should handle CUT_INGREDIENT', () => {
+        expect(ingredientsReducer(undefined, {
+            type: "CUT_INGREDIENT",
+            from: 3,
+        })).toEqual({
+            ...ingredientsState,
+            draggedIngredient: ingredientsState.draggedIngredients[3],
+            reorderedIngredients: ingredientsState.draggedIngredients.filter((item, itemIndex) => itemIndex !== 3)
+        })
     })
 })

@@ -1,14 +1,7 @@
-import "cypress-localstorage-commands";
-
+// @ts-ignore
 describe('burger constructor works correctly', () => {
 
-  beforeEach(() => {
-    cy.visit('http://localhost:3000/').request('POST', `https://norma.nomoreparties.space/api/auth/login`, {
-      email: "testtesttestteststtstststst@test.test",
-      password: "12345678",
-    }).then((response) => {
-      cy.window().then(win => win.localStorage.setItem('accessToken', response.body.accessToken.split('Bearer ')[1]))
-  })})
+  beforeEach(() => cy.visit('http://localhost:3000/'))
 
   it('should check if submit button is disabled without buns in constructor', () => {
     cy
@@ -30,34 +23,36 @@ describe('burger constructor works correctly', () => {
   })
 
   it('should drag bun to constructor', () => {
-    const dataTransfer = new DataTransfer();
     cy
         .contains('булка')
         .first()
-        .trigger('dragstart', {dataTransfer})
+        .trigger('mousedown')
+        .trigger('dragstart')
     cy
         .get('#drop-target')
-        .trigger('drop', {dataTransfer})
+        .trigger('drop')
     cy
         .get('#drop-target').contains('булка')
   })
 
   it('should make order', () => {
-    const dataTransfer = new DataTransfer();
+    cy.contains('Личный кабинет').click()
+    cy.get('input[name=email]').type('testtesttestteststtstststst@test.test')
+    cy.get('input[name=password]').type('12345678')
+    cy.get('button').should('have.text', 'Войти').click().wait(1000)
+
     cy
         .contains('булка')
         .first()
-        .trigger('dragstart', {dataTransfer})
+        .trigger('mousedown')
+        .trigger('dragstart')
     cy
         .get('#drop-target')
-        .trigger('drop', {dataTransfer})
+        .trigger('drop')
     cy
         .get('#drop-target').contains('булка')
-    cy
-        .contains('Оформить заказ').click()
+
+    cy.contains('Оформить заказ').click().wait(15000)
+    cy.contains('идентификатор заказа')
   })
-
-
-
-
 })
