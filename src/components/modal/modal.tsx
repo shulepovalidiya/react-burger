@@ -31,7 +31,7 @@ const Modal: FC<TModalProps> = ({children, header, onClose}) => {
     return createPortal(
         <ModalOverlay>
             <div className={`${modalStyles.opened}`}>
-                <div className={`${modalStyles.header} mt-10 mr-10 ml-10`}>
+                <div className={`${modalStyles.header} mt-10 mr-10 ml-10`} id="modal-header">
                     <h2 className="text text_type_main-large">{header}</h2>
                     <CloseIcon onClick={onClose} type={"primary"}/>
                 </div>

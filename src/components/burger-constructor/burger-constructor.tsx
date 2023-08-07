@@ -97,7 +97,7 @@ function BurgerConstructor() {
 
     return (
         <section className={`${constructorStyles.constructor} pt-25 pr-4 pl-4`}>
-            <div className={constructorStyles.constructorList} ref={dropTarget}>
+            <div className={constructorStyles.constructorList} ref={dropTarget} id="drop-target">
                 {!currentBun
                     ? (<div className={`${constructorStyles.top} ${constructorStyles.default}`}>
                         <p className="text text_type_main-default text_color_inactive">Выберите булку</p>

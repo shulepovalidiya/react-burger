@@ -17,7 +17,7 @@ type TWSState = {
     totalToday: number;
 }
 
-const initialState: TWSState = {
+export const initialState: TWSState = {
     wsConnected: false,
     orders: [],
     success: false,
@@ -38,7 +38,6 @@ export const wsReducer = (state = initialState, action: TWSActions) => {
         case WS_CONNECTION_ERROR:
             return {
                 ...state,
-                error: action,
                 wsConnected: false
             };
 
@@ -52,6 +51,7 @@ export const wsReducer = (state = initialState, action: TWSActions) => {
         case WS_GET_ORDERS:
             return {
                 ...state,
+                wsConnected: true,
                 error: undefined,
                 success: action.payload.success,
                 orders: action.payload.orders,

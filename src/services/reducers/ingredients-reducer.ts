@@ -1,9 +1,7 @@
 import {
-    INGREDIENT_CLICK,
     GET_INGREDIENTS_REQUEST,
     GET_INGREDIENTS_SUCCESS,
     GET_INGREDIENTS_FAILED,
-    CLOSE_INGREDIENTS_MODAL,
     GET_ORDER_NUMBER_FAILED,
     GET_ORDER_NUMBER_REQUEST,
     GET_ORDER_NUMBER_SUCCESS,
@@ -24,7 +22,6 @@ type TIngredientsState = {
     ingredientsFailed: boolean;
     draggedIngredient: TIngredient | {};
     draggedIngredients: TIngredient[];
-    currentIngredient: TIngredient | null;
     currentBun: TIngredient | null;
     orderNumber: number | null;
     orderNumberRequest: boolean,
@@ -37,13 +34,12 @@ type TIngredientsState = {
     currentName: string | null;
 }
 
-const ingredientsState: TIngredientsState = {
+export const ingredientsState: TIngredientsState = {
     ingredients: [],
     ingredientsRequest: false,
     ingredientsFailed: false,
     draggedIngredient: {},
     draggedIngredients: [],
-    currentIngredient: null,
     currentBun: null,
     orderNumber: null,
     orderNumberRequest: false,
@@ -79,17 +75,7 @@ export const ingredientsReducer = (state: TIngredientsState = ingredientsState, 
                 ingredientsFailed: true,
             }
         }
-        case INGREDIENT_CLICK: {
-            return {
-                ...state,
-                currentIngredient: action.data,
-            }
-        } case CLOSE_INGREDIENTS_MODAL: {
-            return {
-                ...state,
-                currentIngredient: null,
-            }
-        }
+
         case BUN_DROP: {
             return {
                 ...state,
